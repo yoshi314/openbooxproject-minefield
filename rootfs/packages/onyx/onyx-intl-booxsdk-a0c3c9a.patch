@@ -1,0 +1,445 @@
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/CMakeLists.txt	2011-05-15 10:01:11.592912527 +0200
+@@ -2,16 +2,13 @@
+ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+ 
+ # Additional cmake modules
+-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
+-
+-# Naboo project.
+-Project(SDK CXX C)
+-ENABLE_TESTING()
++SET(CMAKE_MODULE_PATH "${ONYX_SDK_ROOT}/cmake_modules")
+ 
+ # Check to use arm toolchain or not
+ IF(BUILD_FOR_ARM)
+     INCLUDE(arm_toolchain)
+     USE_ARM_TOOLCHAIN()
++    link_directories("/opt/onyx/arm/lib")
+ ENDIF(BUILD_FOR_ARM)
+ 
+ IF(UNIX OR BUILD_FOR_ARM)
+@@ -29,6 +26,10 @@
+ ADD_DEFINITIONS(-DCONFIG_CTRL_IFACE_UNIX)
+ ENDIF (WIN32)
+ 
++# Naboo project.
++Project(SDK CXX C)
++ENABLE_TESTING()
++
+ INCLUDE(strict_warning)
+ 
+ # Project include directories.
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/examples/cms/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/examples/cms/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/examples/cms/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/examples/cms/CMakeLists.txt	2011-05-15 11:09:50.146912509 +0200
+@@ -1,5 +1,5 @@
+ enable_qt()
+ 
+ add_executable(query_file query_file.cpp)
+-target_link_libraries(query_file onyx_cms ${QT_LIBRARIES})
++target_link_libraries(query_file onyx_cms onyx_data onyx_screen ${QT_LIBRARIES})
+ set_target_properties(query_file PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/examples/dictionary/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/examples/dictionary/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/examples/dictionary/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/examples/dictionary/CMakeLists.txt	2011-05-15 10:01:11.592912527 +0200
+@@ -12,7 +12,9 @@
+ add_definitions(-DQT_SHARED)
+ add_definitions(-DQT_NO_DEBUG)
+ 
++add_library(my_dict_plugin_static STATIC ${DICT_SRCS})
+ add_library(my_dict_plugin SHARED ${DICT_SRCS})
+-target_link_libraries(my_dict_plugin ${QT_LIBRARIES} ${ADD_LIB})
+ 
++SET_TARGET_PROPERTIES(my_dict_plugin_static PROPERTIES OUTPUT_NAME "my_dict_plugin")
+ 
++target_link_libraries(my_dict_plugin ${QT_LIBRARIES} ${ADD_LIB})
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/examples/sys/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/examples/sys/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/examples/sys/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/examples/sys/CMakeLists.txt	2011-05-15 11:23:15.000000000 +0200
+@@ -3,20 +3,20 @@
+ add_executable(battery_test
+   battery_test.cpp
+ )
+-target_link_libraries(battery_test onyx_sys onyx_data ${QT_LIBRARIES} m rt pthread dl)
++target_link_libraries(battery_test onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} m rt pthread dl)
+ set_target_properties(battery_test PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+ add_executable(dump_wifi_profile
+   dump_wifi_profile.cpp
+ )
+-target_link_libraries(dump_wifi_profile onyx_sys onyx_data ${QT_LIBRARIES} m rt pthread dl)
++target_link_libraries(dump_wifi_profile onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} m rt pthread dl)
+ set_target_properties(dump_wifi_profile PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+ add_executable(wpa_proxy
+   wpa_proxy.cpp
+   ${UNITTEST_WPA_MOC_SRCS}
+ )
+-target_link_libraries(wpa_proxy onyx_sys onyx_data ${QT_LIBRARIES} m rt pthread dl)
++target_link_libraries(wpa_proxy onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} m rt pthread dl)
+ set_target_properties(wpa_proxy PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+ qt4_wrap_cpp(MOC_SYS_STATUS_DUMP_SRCS sys_status_dump.h)
+@@ -24,7 +24,7 @@
+   sys_status_dump.h
+   sys_status_dump.cpp
+   ${MOC_SYS_STATUS_DUMP_SRCS})
+-target_link_libraries(sys_status_dump onyx_sys onyx_data ${QT_LIBRARIES} m rt pthread dl)
++target_link_libraries(sys_status_dump onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} m rt pthread dl)
+ set_target_properties(sys_status_dump
+   PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+@@ -34,16 +34,16 @@
+ add_executable(snapshot
+   snapshot.cpp
+ )
+-target_link_libraries(snapshot onyx_sys onyx_data ${QT_LIBRARIES} ${ADD_LIB})
++target_link_libraries(snapshot onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} ${ADD_LIB})
+ 
+ add_executable(dump_device_info
+   dump_device_info.cpp
+ )
+-target_link_libraries(dump_device_info onyx_sys onyx_data ${QT_LIBRARIES} ${ADD_LIB})
++target_link_libraries(dump_device_info onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} ${ADD_LIB})
+ set_target_properties(dump_device_info PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+ add_executable(change_gray_scale
+   change_gray_scale.cpp
+ )
+-target_link_libraries(change_gray_scale onyx_sys onyx_data ${QT_LIBRARIES} ${ADD_LIB})
++target_link_libraries(change_gray_scale onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} ${ADD_LIB})
+ set_target_properties(change_gray_scale PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/base/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/base/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/base/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/base/CMakeLists.txt	2011-05-15 10:01:11.598912703 +0200
+@@ -5,10 +5,11 @@
+   ${ONYXSDK_DIR}/include/onyx/base/tasks_handler.h
+ )
+ 
+-add_library(onyx_base ${MOC_SRCS}
+-  base_model.cpp
+-  tasks_handler.cpp
+-)
++add_library(onyx_base_static STATIC ${MOC_SRCS} base_model.cpp tasks_handler.cpp)
++add_library(onyx_base SHARED ${MOC_SRCS} base_model.cpp tasks_handler.cpp)
++
++SET_TARGET_PROPERTIES(onyx_base_static PROPERTIES OUTPUT_NAME "onyx_base")
++
+ target_link_libraries(onyx_base
+   onyx_data # This is added for base_model. Perhaps base_model should be in onyx_data
+ )
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/CMakeLists.txt	2011-05-15 10:01:11.599912725 +0200
+@@ -1,7 +1,10 @@
+ enable_qt()
+ 
++add_library(onyxapp_static STATIC application.cpp onyx_main.cpp)
++add_library(onyxapp SHARED application.cpp onyx_main.cpp)
++
++SET_TARGET_PROPERTIES(onyxapp_static PROPERTIES OUTPUT_NAME "onyxapp")
+ 
+-add_library(onyxapp application.cpp onyx_main.cpp)
+ target_link_libraries(onyxapp onyx_sys onyx_screen ${QT_LIBRARIES})
+ strict_warning(onyxapp)
+ 
+@@ -13,6 +16,6 @@
+ add_subdirectory(sys)
+ add_subdirectory(ui)
+ add_subdirectory(wireless)
+-add_subdirectory(sound)
+-add_subdirectory(tts)
+-add_subdirectory(dictionary)
++add_subdirectory(sound)
++add_subdirectory(tts)
++add_subdirectory(dictionary)
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/cms/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/cms/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/cms/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/cms/CMakeLists.txt	2011-05-15 10:01:11.599912725 +0200
+@@ -14,5 +14,9 @@
+   user_db.cpp
+   download_db.cpp)
+ 
+-add_library(onyx_cms ${SRCS})
++add_library(onyx_cms_static STATIC ${SRCS})
++add_library(onyx_cms SHARED ${SRCS})
++
++SET_TARGET_PROPERTIES(onyx_cms_static PROPERTIES OUTPUT_NAME "onyx_cms")
++
+ strict_warning(onyx_cms)
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/data/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/data/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/data/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/data/CMakeLists.txt	2011-05-15 10:01:11.599912725 +0200
+@@ -23,7 +23,7 @@
+   ${ONYXSDK_DIR}/include/onyx/data/data.h
+ )
+ 
+-add_library(onyx_data
++SET(SRCS
+   configuration.cpp
+   bookmark.cpp
+   reading_history.cpp
+@@ -49,5 +49,11 @@
+   search_context.cpp
+   ${MOC_SRCS}
+ )
++
++add_library(onyx_data_static STATIC ${SRCS})
++add_library(onyx_data SHARED ${SRCS})
++
++SET_TARGET_PROPERTIES(onyx_data_static PROPERTIES OUTPUT_NAME "onyx_data")
++
+ target_link_libraries(onyx_data onyx_cms onyx_sys)
+ strict_warning(onyx_data)
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/dictionary/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/dictionary/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/dictionary/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/dictionary/CMakeLists.txt	2011-05-15 10:08:52.591912846 +0200
+@@ -30,8 +30,11 @@
+ SET(resource_srcs dictionary_images.qrc)
+ QT4_ADD_RESOURCES(dictionary_ui_res ${resource_srcs})
+ 
++ADD_LIBRARY(dictionary_static STATIC ${SRCS} ${MOC_SRCS} ${dictionary_ui_res})
++ADD_LIBRARY(dictionary SHARED ${SRCS} ${MOC_SRCS} ${dictionary_ui_res})
++
++SET_TARGET_PROPERTIES(dictionary_static PROPERTIES OUTPUT_NAME "dictionary")
+ 
+-ADD_LIBRARY(dictionary ${SRCS} ${MOC_SRCS} ${dictionary_ui_res})
+ TARGET_LINK_LIBRARIES(dictionary onyx_ui)
+ 
+ ########### Unit Tests #####################
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/screen/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/screen/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/screen/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/screen/CMakeLists.txt	2011-05-15 10:16:00.352910971 +0200
+@@ -1,3 +1,7 @@
+ QT4_WRAP_CPP(MOC_SRCS ${ONYXSDK_DIR}/include/onyx/screen/screen_update_watcher.h)
+-add_library(onyx_screen STATIC screen_proxy.cpp screen_update_watcher.cpp ${MOC_SRCS})
++
++add_library(onyx_screen_static STATIC screen_proxy.cpp screen_update_watcher.cpp ${MOC_SRCS})
++add_library(onyx_screen SHARED screen_proxy.cpp screen_update_watcher.cpp ${MOC_SRCS})
++SET_TARGET_PROPERTIES(onyx_screen_static PROPERTIES OUTPUT_NAME "onyx_screen")
++
+ install(TARGETS onyx_screen DESTINATION lib)
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sound/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/sound/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/sound/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/sound/CMakeLists.txt	2011-05-15 11:50:36.000000000 +0200
+@@ -10,13 +10,16 @@
+ SET(srcs ${srcs} ${hrds} ${MOC_SRCS})
+ 
+ # Sound library.
+-ADD_LIBRARY(sound ${srcs})
++ADD_LIBRARY(sound_static STATIC ${srcs})
++ADD_LIBRARY(sound SHARED ${srcs})
++
++SET_TARGET_PROPERTIES(sound_static PROPERTIES OUTPUT_NAME "sound")
+ 
+ # Unittest
+ add_definitions(-DSAMPLE_ROOT="${CMAKE_SOURCE_DIR}/unittest/data")
+ FILE(GLOB WAV_UNITTEST_SRCS unittest/wave_unittest.cpp)
+ ADD_EXECUTABLE(wav_unittest ${WAV_UNITTEST_SRCS})
+-TARGET_LINK_LIBRARIES(wav_unittest sound onyx_sys
++TARGET_LINK_LIBRARIES(wav_unittest sound onyx_sys onyx_data onyx_screen
+    gtest_main
+    ${QT_LIBRARIES}
+    ${ADD_LIB}
+@@ -29,7 +32,7 @@
+ FILE(GLOB ASYNC_PLAYER_UNITTEST_SRCS unittest/async_player_unittest.cpp)
+ 
+ ADD_EXECUTABLE(async_player_unittest ${ASYNC_PLAYER_UNITTEST_SRCS})
+-TARGET_LINK_LIBRARIES(async_player_unittest sound onyx_sys
++TARGET_LINK_LIBRARIES(async_player_unittest sound onyx_sys onyx_data onyx_screen
+    gtest_main
+    ${QT_LIBRARIES}
+    ${ADD_LIB}
+@@ -43,7 +46,7 @@
+ FILE(GLOB SOUND_UNITTEST_SRCS unittest/sound_unittest.cpp)
+ 
+ ADD_EXECUTABLE(sound_unittest ${SOUND_UNITTEST_SRCS})
+-TARGET_LINK_LIBRARIES(sound_unittest sound onyx_sys
++TARGET_LINK_LIBRARIES(sound_unittest sound onyx_sys onyx_data onyx_screen
+    gtest_main
+    ${QT_LIBRARIES}
+    ${ADD_LIB}
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sys/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/sys/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/sys/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/sys/CMakeLists.txt	2011-05-15 10:49:58.700914826 +0200
+@@ -13,9 +13,13 @@
+ FILE(GLOB SRCS *.cpp)
+ SET(SRCS ${HDRS} ${SRCS} ${MOC_SRCS})
+ 
+-ADD_LIBRARY(onyx_sys ${SRCS})
++ADD_LIBRARY(onyx_sys_static STATIC ${SRCS})
++ADD_LIBRARY(onyx_sys SHARED ${SRCS})
++
++SET_TARGET_PROPERTIES(onyx_sys_static PROPERTIES OUTPUT_NAME "onyx_sys")
++
+ strict_warning(onyx_sys)
+-TARGET_LINK_LIBRARIES(onyx_sys onyx_wpa onyx_data)
++TARGET_LINK_LIBRARIES(onyx_sys onyx_wpa)
+ 
+ 
+ INSTALL(TARGETS onyx_sys DESTINATION lib)
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/tts/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/tts/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/tts/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/tts/CMakeLists.txt	2011-05-15 10:01:11.602912822 +0200
+@@ -61,7 +61,10 @@
+ SET(resource_srcs tts_images.qrc)
+ QT4_ADD_RESOURCES(tts_ui_res ${resource_srcs})
+ 
+-ADD_LIBRARY(tts ${SRCS} ${MOC_SRCS} ${tts_ui_res})
++ADD_LIBRARY(tts_static STATIC ${SRCS} ${MOC_SRCS} ${tts_ui_res})
++ADD_LIBRARY(tts SHARED ${SRCS} ${MOC_SRCS} ${tts_ui_res})
++
++SET_TARGET_PROPERTIES(tts_static PROPERTIES OUTPUT_NAME "tts")
+ 
+ TARGET_LINK_LIBRARIES(tts sound  onyx_ui
+    ${QT_LIBRARIES}
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/ui/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/ui/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/ui/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/ui/CMakeLists.txt	2011-05-15 10:01:11.602912822 +0200
+@@ -16,11 +16,10 @@
+     vbf_icons.qrc)
+ QT4_ADD_RESOURCES(VBF_ICONS_RCCS_SRCS ${VBF_ICONS_RCCS})
+ 
+-IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
+-    ADD_LIBRARY(onyx_ui ${SRCS} ${IMAGES_RES}  ${VBF_ICONS_RCCS_SRCS})
+-ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
+-    ADD_LIBRARY(onyx_ui SHARED ${SRCS} ${IMAGES_RES}  ${VBF_ICONS_RCCS_SRCS})
+-ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
++ADD_LIBRARY(onyx_ui_static STATIC ${SRCS} ${IMAGES_RES}  ${VBF_ICONS_RCCS_SRCS})
++ADD_LIBRARY(onyx_ui SHARED ${SRCS} ${IMAGES_RES}  ${VBF_ICONS_RCCS_SRCS})
++
++SET_TARGET_PROPERTIES(onyx_ui_static PROPERTIES OUTPUT_NAME "onyx_ui")
+ 
+ if (NOT WIN32)
+ strict_warning(onyx_ui)
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/wireless/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/wireless/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/wireless/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/wireless/CMakeLists.txt	2011-05-15 10:01:11.603912846 +0200
+@@ -15,7 +15,12 @@
+ QT4_ADD_RESOURCES(WIFI_RES ${resource_srcs})
+ 
+ QT4_WRAP_CPP(MOC_SRCS ${HDRS})
+-ADD_LIBRARY(onyx_wireless ${SRCS} ${MOC_SRCS} ${WIFI_RES})
++
++ADD_LIBRARY(onyx_wireless_static STATIC ${SRCS} ${MOC_SRCS} ${WIFI_RES})
++ADD_LIBRARY(onyx_wireless SHARED ${SRCS} ${MOC_SRCS} ${WIFI_RES})
++
++SET_TARGET_PROPERTIES(onyx_wireless_static PROPERTIES OUTPUT_NAME "onyx_wireless")
++
+ strict_warning(onyx_wireless)
+ INSTALL(TARGETS onyx_wireless DESTINATION lib)
+ 
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/wpa/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/wpa/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/wpa/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/wpa/CMakeLists.txt	2011-05-15 10:01:11.603912846 +0200
+@@ -6,6 +6,9 @@
+     SET(SRC wpa_ctrl.c os_unix.c)
+ ENDIF (WIN32)
+ 
+-ADD_LIBRARY(onyx_wpa ${SRC})
+-strict_warning(onyx_wpa)
++ADD_LIBRARY(onyx_wpa_static STATIC ${SRC})
++ADD_LIBRARY(onyx_wpa SHARED ${SRC})
++
++SET_TARGET_PROPERTIES(onyx_wpa_static PROPERTIES OUTPUT_NAME "onyx_wpa")
+ 
++strict_warning(onyx_wpa)
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/tests/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/tests/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/tests/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/tests/CMakeLists.txt	2011-05-15 10:01:11.604912868 +0200
+@@ -30,11 +30,11 @@
+   WILL_FAIL TRUE)
+ 
+ onyx_test(conf_unittest conf_unittest.cpp configuration.cpp)
+-TARGET_LINK_LIBRARIES(conf_unittest onyx_cms onyx_data ${QT_LIBRARIES})
++TARGET_LINK_LIBRARIES(conf_unittest onyx_cms onyx_data onyx_screen ${QT_LIBRARIES})
+ ADD_TEST(BookmarkUnittest ${TEST_OUTPUT_PATH}/conf_unittest)
+ 
+ ADD_EXECUTABLE(bookmark_unittest bookmark_unittest.cpp)
+-TARGET_LINK_LIBRARIES(bookmark_unittest onyx_cms gtest_main onyx_data ${QT_LIBRARIES})
++TARGET_LINK_LIBRARIES(bookmark_unittest onyx_cms gtest_main onyx_data onyx_screen ${QT_LIBRARIES})
+ MAYBE_LINK_TCMALLOC(bookmark_unittest)
+ SET_TARGET_PROPERTIES(bookmark_unittest PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ ADD_TEST(BookmarkUnittest ${TEST_OUTPUT_PATH}/bookmark_unittest)
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/tests/cms/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/tests/cms/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/tests/cms/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/tests/cms/CMakeLists.txt	2011-05-15 12:08:35.000000000 +0200
+@@ -1,7 +1,7 @@
+ enable_qt()
+ 
+ onyx_test(content_manager_unittest content_manager_unittest.cpp)
+-target_link_libraries(content_manager_unittest onyx_data onyx_cms onyx_data onyx_sys ${QT_LIBRARIES} gtest)
++target_link_libraries(content_manager_unittest onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES} gtest)
+ 
+ onyx_test(thumbnail_unittest thumbnail_unittest.cpp)
+-target_link_libraries(thumbnail_unittest onyx_cms onyx_sys ${QT_LIBRARIES} gtest)
++target_link_libraries(thumbnail_unittest onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES} gtest)
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/tests/sys/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/tests/sys/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/code/tests/sys/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/tests/sys/CMakeLists.txt	2011-05-15 12:00:23.000000000 +0200
+@@ -1,17 +1,17 @@
+ enable_qt()
+ 
+ onyx_test(sys_conf_test sys_conf_test.cpp)
+-target_link_libraries(sys_conf_test  onyx_sys onyx_data gtest  ${QT_LIBRARIES}  ${ADD_LIB})
++target_link_libraries(sys_conf_test  onyx_sys onyx_data onyx_screen gtest  ${QT_LIBRARIES}  ${ADD_LIB})
+ 
+ 
+ 
+ ADD_EXECUTABLE(wifi_manager_unittest wifi_manager_test.cpp)
+-TARGET_LINK_LIBRARIES(wifi_manager_unittest onyx_cms onyx_sys onyx_data ${QT_LIBRARIES})
++TARGET_LINK_LIBRARIES(wifi_manager_unittest onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES})
+ SET_TARGET_PROPERTIES(wifi_manager_unittest PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+ ADD_EXECUTABLE(generate_default_peers generate_default_peers.cpp)
+-TARGET_LINK_LIBRARIES(generate_default_peers onyx_cms onyx_data onyx_sys onyx_data ${QT_LIBRARIES})
++TARGET_LINK_LIBRARIES(generate_default_peers onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES})
+ 
+ 
+ ADD_EXECUTABLE(unzip_test unzip_test.cpp)
+-TARGET_LINK_LIBRARIES(unzip_test onyx_cms onyx_data onyx_sys onyx_data ${QT_LIBRARIES})
+\ No newline at end of file
++TARGET_LINK_LIBRARIES(unzip_test onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES})
+\ No newline at end of file
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/third_party/gmock/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/third_party/gmock/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/third_party/gmock/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/third_party/gmock/CMakeLists.txt	2011-05-15 10:01:11.604912868 +0200
+@@ -1,7 +1,10 @@
+ include_directories(. include)
+ 
+-add_library(gmock
+-  src/gmock-all.cc)
++add_library(gmock_static STATIC src/gmock-all.cc)
++add_library(gmock SHARED src/gmock-all.cc)
++
++SET_TARGET_PROPERTIES(gmock_static PROPERTIES OUTPUT_NAME "gmock")
++
+ set_target_properties(gmock
+   PROPERTIES
+   COMPILE_FLAGS "-DPATH_MAX=4096")
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/third_party/gtest/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/third_party/gtest/CMakeLists.txt
+--- onyx-intl-booxsdk-a0c3c9a.org/third_party/gtest/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/third_party/gtest/CMakeLists.txt	2011-05-15 10:01:11.605912887 +0200
+@@ -1,10 +1,17 @@
+ include_directories(.)
+ 
+-add_library(gtest
+-  src/gtest-all.cc)
++add_library(gtest_static STATIC src/gtest-all.cc)
++add_library(gtest SHARED src/gtest-all.cc)
++
++SET_TARGET_PROPERTIES(gtest_static PROPERTIES OUTPUT_NAME "gtest")
++
+ set_target_properties(gtest
+   PROPERTIES
+   COMPILE_FLAGS "-DPATH_MAX=4096")
+ 
+-add_library(gtest_main src/gtest_main.cc)
++add_library(gtest_main_static STATIC src/gtest_main.cc)
++add_library(gtest_main SHARED src/gtest_main.cc)
++
++SET_TARGET_PROPERTIES(gtest_main_static PROPERTIES OUTPUT_NAME "gtest_main")
++
+ target_link_libraries(gtest_main gtest)

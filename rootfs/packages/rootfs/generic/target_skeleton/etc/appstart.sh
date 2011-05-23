@@ -21,6 +21,10 @@ if [ ! -d "/root/onyx_reader" ]; then
     mkdir -p /root/onyx_reader
 fi
 
+if [ ! -d "/usr/share/adobe/resources/fonts" ]; then
+    ln -s /opt/onyx/arm/lib/fonts /usr/share/adobe/resources/fonts
+fi
+
 if [ ! -f "/root/Settings/language" ]; then
     rm -rf /root/Setting/language  # just in case there's a dir with the name.
     echo "export LANG=en_US.UTF-8" > /root/Settings/language
@@ -56,6 +60,13 @@ if [ -f "/var/run/dbus/pid" ]; then
     rm -f /var/run/dbus/pid
 fi
 dbus-daemon --system --print-address
+
+# create link
+cd /opt/onyx/arm/lib/fonts
+for args in *.otf
+do
+    ln -sf $args ${args%%.*}.ttf
+done
 
 # Start watchdog, a safe wrapper for system_manager
 /etc/watchdog.sh &

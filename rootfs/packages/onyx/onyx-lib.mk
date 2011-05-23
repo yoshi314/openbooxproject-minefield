@@ -1,4 +1,4 @@
-ONYX_LIB_NAME=onyx-intl-booxsdk-9576c1c
+ONYX_LIB_NAME=onyx-intl-booxsdk-a0c3c9a
 ONYX_LIB_SOURCE=$(ONYX_LIB_NAME).tar.gz
 ONYX_LIB_DIR=$(BUILD_DIR)/$(ONYX_LIB_NAME)
 

@@ -48,7 +48,6 @@ $(HOST_DIR)$(EPREFIX)/lib/libiconv.so.2.5.0: $(LIBICONV_DIR)/lib/.libs/libiconv.
 	touch -c $(HOST_DIR)$(EPREFIX)/lib/libiconv.so.2.5.0
 
 $(TARGET_DIR)$(EPREFIX)/lib/libiconv.so.2.5.0: $(HOST_DIR)$(EPREFIX)/lib/libiconv.so.2.5.0
-	mkdir -p $(TARGET_DIR)$(EPREFIX)/lib
 	cp -dpf $(HOST_DIR)$(EPREFIX)/lib/libiconv.so* $(TARGET_DIR)$(EPREFIX)/lib
 	-$(TARGET_STRIP) $(TARGET_DIR)$(EPREFIX)/lib/libiconv.so.2.5.0
 	cp -dpf $(HOST_DIR)$(EPREFIX)/lib/libcharset.so* $(TARGET_DIR)$(EPREFIX)/lib

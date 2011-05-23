@@ -38,7 +38,6 @@ $(HOST_DIR)$(EPREFIX)/lib/libz.so.1.2.3: $(ZLIB_DIR)/libz.so.1.2.3
 	touch -c $(HOST_DIR)$(EPREFIX)/lib/libz.so.1.2.3
 
 $(TARGET_DIR)$(EPREFIX)/lib/libz.so.1.2.3: $(HOST_DIR)$(EPREFIX)/lib/libz.so.1.2.3
-	mkdir -p $(TARGET_DIR)$(EPREFIX)/lib
 	cp -dpf $(HOST_DIR)$(EPREFIX)/lib/libz.so* $(TARGET_DIR)$(EPREFIX)/lib
 	-$(TARGET_STRIP) $(TARGET_DIR)$(EPREFIX)/lib/libz.so*
 	touch -c $(TARGET_DIR)$(EPREFIX)/lib/libz.so.1.2.3

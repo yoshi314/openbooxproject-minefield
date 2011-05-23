@@ -1,9 +1,9 @@
 QT_SOURCE= qt-embedded-linux-opensource-src-4.5.2.tar.gz
 QT_DIR= $(BUILD_DIR)/qt-embedded-linux-opensource-src-4.5.2
-#QT_DOWNLOAD_SITE= "http://get.qt.nokia.com/qt/source"
+QT_DOWNLOAD_SITE= "http://get.qt.nokia.com/qt/source"
 
 $(DL_DIR)/$(QT_SOURCE):
-	$(WGET) -P $(DL_DIR) $(DOWNLOAD_SITE)/$(QT_SOURCE)
+	$(WGET) -P $(DL_DIR) $(QT_DOWNLOAD_SITE)/$(QT_SOURCE)
 
 $(QT_DIR)/.unpacked:$(DL_DIR)/$(QT_SOURCE)
 	tar -C $(BUILD_DIR) -zxf $(DL_DIR)/$(QT_SOURCE)

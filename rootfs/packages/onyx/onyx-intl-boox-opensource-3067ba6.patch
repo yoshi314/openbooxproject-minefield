@@ -1,6 +1,6 @@
-diff -ruN onyx-intl-boox-opensource-9124236.org/CMakeLists.txt onyx-intl-boox-opensource-9124236/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/CMakeLists.txt	2011-01-02 12:32:36.746348291 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/CMakeLists.txt	2011-05-15 12:29:22.795911519 +0200
 @@ -1,6 +1,24 @@
  cmake_minimum_required(VERSION 2.6)
  
@@ -62,9 +62,9 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/CMakeLists.txt onyx-intl-boox-op
  
  add_subdirectory(code/src)
 -add_subdirectory(third_party)
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/dictionary_tool/CMakeLists.txt onyx-intl-boox-opensource-9124236/code/src/dictionary_tool/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/code/src/dictionary_tool/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/dictionary_tool/CMakeLists.txt	2011-01-02 12:32:36.748348970 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/dictionary_tool/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/dictionary_tool/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/dictionary_tool/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/dictionary_tool/CMakeLists.txt	2011-05-15 12:29:22.795911519 +0200
 @@ -10,14 +10,12 @@
  
  ADD_EXECUTABLE(dict_tool ${SRCS})
@@ -80,9 +80,9 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/dictionary_tool/CMakeLi
    ${QT_LIBRARIES}
    ${ADD_LIB}
  )
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/djvu_reader/CMakeLists.txt onyx-intl-boox-opensource-9124236/code/src/djvu_reader/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/code/src/djvu_reader/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/djvu_reader/CMakeLists.txt	2011-01-02 12:32:36.751350146 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/djvu_reader/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/djvu_reader/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/djvu_reader/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/djvu_reader/CMakeLists.txt	2011-05-15 12:29:22.796911566 +0200
 @@ -24,5 +24,7 @@
    onyx_screen
    onyx_ui
@@ -91,9 +91,9 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/djvu_reader/CMakeLists.
 +  tts
    ${iconv_lib}
    ${QT_LIBRARIES})
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/djvu_reader/libdjvu/CMakeLists.txt onyx-intl-boox-opensource-9124236/code/src/djvu_reader/libdjvu/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/code/src/djvu_reader/libdjvu/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/djvu_reader/libdjvu/CMakeLists.txt	2011-01-02 12:32:36.753346031 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/djvu_reader/libdjvu/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/djvu_reader/libdjvu/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/djvu_reader/libdjvu/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/djvu_reader/libdjvu/CMakeLists.txt	2011-05-15 12:29:22.796911566 +0200
 @@ -120,6 +120,8 @@
  XMLTags.cpp
  ZPCodec.cpp)
@@ -106,9 +106,9 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/djvu_reader/libdjvu/CMa
 +ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
 +	ADD_LIBRARY(djvulibre SHARED ${HDRS} ${SRCS})
 +ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/bzip2/CMakeLists.txt onyx-intl-boox-opensource-9124236/code/src/fbreader_onyx/bzip2/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/bzip2/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/fbreader_onyx/bzip2/CMakeLists.txt	2011-01-02 12:32:36.756348277 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/bzip2/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/bzip2/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/bzip2/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/bzip2/CMakeLists.txt	2011-05-15 12:29:22.797911612 +0200
 @@ -12,5 +12,8 @@
  ADD_DEFINITIONS(-D_FILE_OFFSET_BITS=64)
  
@@ -120,9 +120,9 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/bzip2/CMa
 +ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
 +	ADD_LIBRARY(bz2 SHARED ${SRCS})
 +ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/CMakeLists.txt onyx-intl-boox-opensource-9124236/code/src/fbreader_onyx/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/fbreader_onyx/CMakeLists.txt	2011-01-02 12:32:36.761345727 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/CMakeLists.txt	2011-05-15 12:29:22.798911657 +0200
 @@ -13,7 +13,13 @@
  # linebreak library
  FILE(GLOB_RECURSE linebreak_headers linebreak/*.h)
@@ -171,9 +171,9 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/CMakeList
  
  QT4_WRAP_CPP(moc_onyx_reader_app_srcs zlibrary/ui/src/qt4/library/ZLibrary.h)
  
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt onyx-intl-boox-opensource-9124236/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt	2011-01-02 12:32:36.763347545 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt	2011-05-15 12:29:22.799911700 +0200
 @@ -75,5 +75,10 @@
      pole.h
      )
@@ -186,9 +186,9 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/wv2-0.4.2
 +ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
 +
  TARGET_LINK_LIBRARIES( wv2 ${ICONV_LIBRARIES} ${ZLIB_LIBRARIES} )
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/zlibrary/CMakeLists.txt onyx-intl-boox-opensource-9124236/code/src/fbreader_onyx/zlibrary/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/zlibrary/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/fbreader_onyx/zlibrary/CMakeLists.txt	2011-01-02 12:32:36.766347601 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/zlibrary/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/zlibrary/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/zlibrary/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/zlibrary/CMakeLists.txt	2011-05-15 12:29:22.799911700 +0200
 @@ -139,11 +139,22 @@
      ${zlibrary_core_desktop_dlg_srcs}
  )
@@ -200,6 +200,7 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/zlibrary/
 -  ${zlibrary_text_headers} ${zlibrary_text_srcs}
 -  ${zlibrary_ui_sys_headers} ${ZLIBRARY_ui_sys_srcs}
 -  ${moc_zlibrary_ui_srcs})
+-target_link_libraries(zlibrary ${QT_LIBRARIES} )
 +IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
 +	add_library(zlibrary
 +	  ${zlibrary_core_hdrs} ${zlibrary_core_srcs}
@@ -218,10 +219,10 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/fbreader_onyx/zlibrary/
 +	  ${moc_zlibrary_ui_srcs})
 +ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
 +
- target_link_libraries(zlibrary ${QT_LIBRARIES})
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/feed_reader/CMakeLists.txt onyx-intl-boox-opensource-9124236/code/src/feed_reader/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/code/src/feed_reader/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/feed_reader/CMakeLists.txt	2011-01-02 12:38:37.469346684 +0100
++target_link_libraries(zlibrary ${QT_LIBRARIES})
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/feed_reader/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/feed_reader/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/feed_reader/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/feed_reader/CMakeLists.txt	2011-05-15 12:29:22.800911742 +0200
 @@ -13,7 +13,8 @@
    widget_updater.h
  )
@@ -245,10 +246,10 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/feed_reader/CMakeLists.
  set(ONYX_LIBS onyx_sys onyx_ui onyx_wireless onyx_wpa onyx_screen onyx_data onyx_cms)
  
  target_link_libraries(feed_reader_lib  ${QT_LIBRARIES} ${ONYX_LIBS} ${feedreader})
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/music_player/CMakeLists.txt onyx-intl-boox-opensource-9124236/code/src/music_player/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/code/src/music_player/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/music_player/CMakeLists.txt	2011-01-02 12:32:36.774348948 +0100
-@@ -51,7 +51,12 @@
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/music_player/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/music_player/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/music_player/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/music_player/CMakeLists.txt	2011-05-15 12:29:22.801911783 +0200
+@@ -53,7 +53,12 @@
  
  QT4_ADD_RESOURCES(MUSIC_PLAYER_RES music_player.qrc)
  
@@ -262,9 +263,9 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/music_player/CMakeLists
  TARGET_LINK_LIBRARIES(music_player_lib
     onyx_screen
     sound
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/music_player/libcurl/curl/curlbuild.h onyx-intl-boox-opensource-9124236/code/src/music_player/libcurl/curl/curlbuild.h
---- onyx-intl-boox-opensource-9124236.org/code/src/music_player/libcurl/curl/curlbuild.h	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/music_player/libcurl/curl/curlbuild.h	2011-01-02 12:32:36.778348936 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/music_player/libcurl/curl/curlbuild.h onyx-intl-boox-opensource-3067ba6/code/src/music_player/libcurl/curl/curlbuild.h
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/music_player/libcurl/curl/curlbuild.h	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/music_player/libcurl/curl/curlbuild.h	2011-05-15 12:29:22.803911860 +0200
 @@ -1,584 +1,192 @@
 -#ifndef __CURL_CURLBUILD_H
 -#define __CURL_CURLBUILD_H
@@ -1042,24 +1043,20 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/music_player/libcurl/cu
 +#define CURL_SUFFIX_CURL_OFF_TU ULL
 +
 +#endif /* __CURL_CURLBUILD_H */
-diff -ruN onyx-intl-boox-opensource-9124236.org/code/src/sudoku/CMakeLists.txt onyx-intl-boox-opensource-9124236/code/src/sudoku/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/code/src/sudoku/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/code/src/sudoku/CMakeLists.txt	2011-01-02 12:32:36.783349606 +0100
-@@ -13,11 +13,9 @@
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/sudoku/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/sudoku/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/code/src/sudoku/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/code/src/sudoku/CMakeLists.txt	2011-05-15 12:33:28.033912996 +0200
+@@ -13,7 +13,6 @@
  
- ADD_EXECUTABLE(sudoku ${SRCS} ${sudoku_RES})
+ ADD_EXECUTABLE(sudoku sudokuactions.cpp ${SRCS} ${sudoku_RES})
  TARGET_LINK_LIBRARIES(sudoku
 -  onyxapp
    onyx_data
    onyx_screen
    onyx_ui
-   ${QT_LIBRARIES}
-   ${ADD_LIB}
- )
--
-diff -ruN onyx-intl-boox-opensource-9124236.org/third_party/gmock/CMakeLists.txt onyx-intl-boox-opensource-9124236/third_party/gmock/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/third_party/gmock/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/third_party/gmock/CMakeLists.txt	2011-01-02 12:32:36.788342908 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/third_party/gmock/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/third_party/gmock/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/third_party/gmock/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/third_party/gmock/CMakeLists.txt	2011-05-15 12:29:22.805911932 +0200
 @@ -1,7 +1,11 @@
  include_directories(. include)
  
@@ -1074,9 +1071,9 @@ diff -ruN onyx-intl-boox-opensource-9124236.org/third_party/gmock/CMakeLists.txt
  set_target_properties(gmock
    PROPERTIES
    COMPILE_FLAGS "-DPATH_MAX=4096")
-diff -ruN onyx-intl-boox-opensource-9124236.org/third_party/gtest/CMakeLists.txt onyx-intl-boox-opensource-9124236/third_party/gtest/CMakeLists.txt
---- onyx-intl-boox-opensource-9124236.org/third_party/gtest/CMakeLists.txt	2011-01-01 18:13:28.000000000 +0100
-+++ onyx-intl-boox-opensource-9124236/third_party/gtest/CMakeLists.txt	2011-01-02 12:32:36.791348428 +0100
+diff -ruN onyx-intl-boox-opensource-3067ba6.org/third_party/gtest/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/third_party/gtest/CMakeLists.txt
+--- onyx-intl-boox-opensource-3067ba6.org/third_party/gtest/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
++++ onyx-intl-boox-opensource-3067ba6/third_party/gtest/CMakeLists.txt	2011-05-15 12:29:22.805911932 +0200
 @@ -1,10 +1,19 @@
  include_directories(.)
  

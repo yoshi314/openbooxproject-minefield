@@ -16,7 +16,7 @@ case "$1" in
         ;;
     start)
         echo "Starting telnet server"
-	telnetd -l /bin/sh
+	telnetd -l /bin/login
         ;;
     stop)
         echo "Stopping telnet server"

@@ -32,7 +32,9 @@ export FONT_DIR="/opt/onyx/arm/lib/fonts/"
 export SUSPEND_INTERVAL=0
 export SHUTDOWN_INTERVAL=900000
 export PINCODE="0000"
+export SHOW_BROWSING_HISTORY=0
 export SHOW_OFFICE_SPLASH=1
+export ADOBE_RESOURCE_FOLDER="/usr/share/adobe/resources/"
 
 source /etc/version
 source /root/Settings/language
@@ -40,4 +42,5 @@ source /root/Settings/screen
 source /root/Settings/waveform
 
 [ -f /root/Settings/grayscale ] && source /root/Settings/grayscale
+
 [ -f /root/Settings/vdd ] && source /root/Settings/vdd

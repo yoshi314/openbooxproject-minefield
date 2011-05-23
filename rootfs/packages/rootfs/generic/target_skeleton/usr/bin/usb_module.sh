@@ -4,7 +4,7 @@ RETRY_TIMES=5
 
 # Script for loading USB modules.
 if [ $# -ne 1 ]; then
-    echo "Usage: `basename $0` <detect|connect|disconnect|serial|3G-host|cleanup>"
+    echo "Usage: `basename $0` <detect|connect|disconnect|serial|3G-host|connect_with_flash|cleanup>"
     exit 1
 fi
 
@@ -12,6 +12,16 @@ if [ $1 = "detect" ]; then
     modprobe -r pcconn_mon
     modprobe pcconn_mon
 elif [ $1 = "connect" ]; then
+    modprobe -r pcconn_mon
+    naboo_reader drm fingerprint
+    umount /media/flash
+    umount /media/sd
+    if [ -b /dev/sdmmc ]; then
+        modprobe g_file_storage file=/media/mtd6/vfat.bin,/dev/sdmmc removable=y
+    else
+        modprobe g_file_storage file=/media/mtd6/vfat.bin removable=y
+    fi
+elif [ $1 = "connect_with_flash" ]; then
     modprobe -r pcconn_mon
     naboo_reader drm fingerprint
     umount /media/flash

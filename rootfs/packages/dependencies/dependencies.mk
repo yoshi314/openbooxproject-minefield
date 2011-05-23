@@ -18,6 +18,7 @@ target-skel: onyx-binaries
 	zcat $(TARGET_SKELETON) | tar -C $(BUILD_DIR) -xf -
 	cp -dpR $(TARGET_SKEL_DIR)/* $(TARGET_DIR)/
 	cp -dpR $(ONYX_BINARIES_DIR)/* $(TARGET_DIR)/
+	mkdir -p $(TARGET_DIR)$(EPREFIX)/lib
 	echo "export VERSION=\"$(BOOX_VERSION) $(shell date +"%Y%m%d")\"" >> $(TARGET_DIR)/etc/version
 	-find $(TARGET_DIR) -type d -name CVS | xargs rm -rf
 

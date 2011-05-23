@@ -1,4 +1,4 @@
-ONYX_APP_NAME=onyx-intl-boox-opensource-880f440
+ONYX_APP_NAME=onyx-intl-boox-opensource-3067ba6
 ONYX_APP_SOURCE=$(ONYX_APP_NAME).tar.gz
 ONYX_APP_DIR=$(BUILD_DIR)/$(ONYX_APP_NAME)
 

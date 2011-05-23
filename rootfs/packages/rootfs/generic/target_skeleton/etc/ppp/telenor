@@ -8,6 +8,6 @@ ABORT "NO ANSWER"
 ABORT "BUSY"
 TIMEOUT 30
 "" at
-OK AT+CGDCONT=1,"IP","telenor",,0,0
+OK AT+CGDCONT=1,"IP","telenor.mbb",,0,0
 OK atdt*99#
 CONNECT
