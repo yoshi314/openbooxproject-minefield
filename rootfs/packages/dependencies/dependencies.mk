@@ -19,7 +19,9 @@ target-skel: onyx-binaries
 	cp -dpR $(TARGET_SKEL_DIR)/* $(TARGET_DIR)/
 	cp -dpR $(ONYX_BINARIES_DIR)/* $(TARGET_DIR)/
 	mkdir -p $(TARGET_DIR)$(EPREFIX)/lib
-	echo "export VERSION=\"$(BOOX_VERSION) $(shell date +"%Y%m%d")\"" >> $(TARGET_DIR)/etc/version
+	mv $(TARGET_DIR)/etc/version $(TARGET_DIR)/etc/version.org
+	packages/dependencies/version.sh $(TARGET_DIR)/etc/version.org $(OBX_VERSION) > $(TARGET_DIR)/etc/version
+	rm $(TARGET_DIR)/etc/version.org
 	-find $(TARGET_DIR) -type d -name CVS | xargs rm -rf
 
 dependencies-source:

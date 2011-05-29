@@ -10,6 +10,7 @@ $(ONYX_LIB_DIR)/.unpacked:$(DL_DIR)/$(ONYX_LIB_SOURCE)
 	mkdir -p $(BUILD_DIR)
 	tar -C $(BUILD_DIR) -zxf $(DL_DIR)/$(ONYX_LIB_SOURCE)
 	$(PATCH) $(ONYX_LIB_DIR) packages/onyx onyx-intl-booxsdk\*.patch
+	cp -dpf packages/onyx/*.png $(ONYX_LIB_DIR)/code/src/ui/images
 	touch $(ONYX_LIB_DIR)/.unpacked
 
 $(ONYX_LIB_DIR)/.configured:$(ONYX_LIB_DIR)/.unpacked

@@ -280,6 +280,31 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sys/CMakeLists.txt onyx-intl-bo
  
  
  INSTALL(TARGETS onyx_sys DESTINATION lib)
+diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sys/sys_status.cpp onyx-intl-booxsdk-a0c3c9a/code/src/sys/sys_status.cpp
+--- onyx-intl-booxsdk-a0c3c9a.org/code/src/sys/sys_status.cpp	2011-04-18 06:54:03.000000000 +0200
++++ onyx-intl-booxsdk-a0c3c9a/code/src/sys/sys_status.cpp	2011-05-26 19:58:50.695317001 +0200
+@@ -701,14 +701,19 @@
+     {
+         QString qws_args=getenv("QWS_DISPLAY");
+         QString data;
+-        if (qws_args.isEmpty()) {
++        if (qws_args.isEmpty())
++        {
+             data = QString("export QWS_DISPLAY=Transformed:Rot%1:OnyxScreen:/dev/mem");
+             #ifdef BUILD_FOR_FB
+             data = QString("export QWS_DISPLAY=Transformed:Rot%1:LinuxFb:/dev/fb0:depth=all"); 
+             #endif
+             data = data.arg(degree);
+-        } else {//replace Rotxx to Rot&degree
++        }
++        else
++        {
++            //replace Rotxx to Rot&degree
+             data = qws_args.replace(QRegExp(":Rot\\d+"),QString(":Rot%1").arg(degree));
++            data.prepend("export QWS_DISPLAY=");
+         }
+         file.write(data.toAscii());
+         file.flush();
 diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/tts/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/tts/CMakeLists.txt
 --- onyx-intl-booxsdk-a0c3c9a.org/code/src/tts/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
 +++ onyx-intl-booxsdk-a0c3c9a/code/src/tts/CMakeLists.txt	2011-05-15 10:01:11.602912822 +0200
