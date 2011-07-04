@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/settings.png</file>
+        <file>images/about.png</file>
+        <file>images/wifi.png</file>
+        <file>images/OpenBOOX-logo.png</file>
+        <file>images/about_dialog_icon.png</file>
+        <file>images/close.png</file>
+        <file>images/organize.png</file>
+        <file>images/runnable_file.png</file>
+        <file>images/games.png</file>
+        <file>images/file.png</file>
+        <file>images/delete.png</file>
+    </qresource>
+</RCC>
