@@ -15,43 +15,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ABOUT_DIALOG_H_
-#define ABOUT_DIALOG_H_
+#ifndef FILE_CLIPBOARD_H_
+#define FILE_CLIPBOARD_H_
 
-#include "onyx/ui/buttons.h"
-#include "onyx/ui/status_bar.h"
-
-using namespace ui;
+class QString;
 
 namespace obx
 {
 
-class AboutDialog : public QDialog
+class FileClipboard
 {
-    Q_OBJECT
+public:
+    FileClipboard();
+    ~FileClipboard();
 
 public:
-    AboutDialog(bool mainUI, QWidget *parent = 0);
-    ~AboutDialog();
+    void cut(QString absoluteFilePath);
+    void copy(QString absoluteFilePath);
+    bool paste(QString absolutePath);
+    void clear();
+    bool isEmpty();
+    bool holdsDir();
+    QString fileName();
 
 private:
-    void keyPressEvent(QKeyEvent *ke);
-    void keyReleaseEvent(QKeyEvent *ke);
-
-private:
-    QVBoxLayout    vbox_;
-    QWidget        title_widget_;
-    QHBoxLayout    title_layout_;
-    QLabel         title_icon_;
-    QLabel         title_label_;
-    OnyxPushButton close_button_;
-
-    QLabel         logo_;
-    QLabel         about_;
-
-    StatusBar      status_bar_;
+    static bool (*actionFunction_)( const QString &, const QString &);
+    static QString absolutePath_;
+    static QString fileName_;
+    static bool holdsDir_;
 };
 
 }
 
-#endif // ABOUT_DIALOG_H_
+#endif // FILE_CLIPBOARD_H_

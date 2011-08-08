@@ -21,7 +21,10 @@
 #include <QtGui/QWidget>
 
 #include "tree_view.h"
+#include "file_clipboard.h"
+#include "boox_action.h"
 
+#include "onyx/screen/screen_proxy.h"
 #include "onyx/ui/system_actions.h"
 #include "onyx/ui/status_bar.h"
 
@@ -32,25 +35,20 @@ namespace obx
 
 typedef enum
 {
-    CAT_HOME = 0,
-    CAT_INT_FLASH,
-    CAT_SD_CARD,
-    CAT_BOOKS,
-    CAT_APPS,
-    CAT_GAMES,
-    CAT_WEBSITES
-} CategoryType;
+    HDLR_HOME = 0,
+    HDLR_FILES,
+    HDLR_BOOKS,
+    HDLR_APPS,
+    HDLR_WEBSITES
+} HandlerType;
 
 class ExplorerView : public QWidget
 {
     Q_OBJECT
 
 public:
-    ExplorerView(QWidget *parent = 0);
+    ExplorerView(bool mainUI, QWidget *parent = 0);
     ~ExplorerView();
-
-public:
-    void isMainUI(bool mainUI);
 
 private Q_SLOTS:
     void onItemActivated(const QModelIndex &);
@@ -61,25 +59,44 @@ private Q_SLOTS:
 
 private:
     void showHome();
-    void showFiles(CategoryType, QString);
-    void showBooks(CategoryType, QString);
-    void showApps(CategoryType, QString);
-    void showWebsites(CategoryType, QString);
-    bool openDataFile(QString);
+    void showFiles(int, QString);
+    void showBooks(int, QString);
+    void showApps(int, QString);
+    void showWebsites(int, QString);
+    void organizeCategories(int row);
+    QString getByExtension(const QString &field, const QString &extension);
+    QString getIconByExtension(const QFileInfo &fileInfo);
+    QString getDisplayName(const QFileInfo &fileInfo);
+    QString getMatchingIcon(const QFileInfo &fileInfo);
+    void addApplication(int category, QString fullFileName);
     int  run(const QString &command, const QStringList & parameters);
     void keyPressEvent(QKeyEvent *ke);
     void keyReleaseEvent(QKeyEvent *ke);
 
 private:
+    onyx::screen::ScreenProxy::Waveform waveform_;
+
     QVBoxLayout        vbox_;
     QStandardItemModel model_;
     ObxTreeView        treeview_;
     StatusBar          status_bar_;
+    SystemActions      systemActions_;
+    BooxActions        fileActions_;
+    BooxActions        organizeActions_;
+    BooxActions        settingsActions_;
 
     bool               mainUI_;
-    CategoryType       curr_category_;
-    int                home_row_;
+    HandlerType        handler_type_;
+    int                category_id_;
+    int                selected_row_;
+    bool               organize_mode_;
+    QString            root_path_;
     QString            current_path_;
+
+    QStringList        book_extensions_;
+    QStringList        icon_extensions_;
+
+    FileClipboard      fileClipboard_;
 };
 
 class ExplorerSplash : public QWidget

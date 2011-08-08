@@ -40,7 +40,7 @@ private:
     ExplorerView view_;
 };
 
-extern bool isSDMounted();
+extern bool initializeDatabase();
 
 }
 

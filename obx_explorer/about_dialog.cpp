@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "obx_explorer.h"
 #include "about_dialog.h"
+#include "file_system_utils.h"
 
 #include "onyx/sys/sys.h"
 #include "onyx/sys/sys_utils.h"
@@ -73,7 +73,7 @@ static QIcon loadIcon(const QString & path, QSize & size)
     return QIcon(pixmap);
 }
 
-AboutDialog::AboutDialog(QWidget *parent)
+AboutDialog::AboutDialog(bool mainUI, QWidget *parent)
     : QDialog(parent, Qt::FramelessWindowHint)
     , vbox_(this)
     , title_widget_(this)
@@ -83,7 +83,6 @@ AboutDialog::AboutDialog(QWidget *parent)
     , close_button_("", 0)
     , logo_(this)
     , about_(this)
-    , license_(this)
     , status_bar_(this, MESSAGE | BATTERY)
 {
     resize(qApp->desktop()->screenGeometry().size());
@@ -125,36 +124,50 @@ AboutDialog::AboutDialog(QWidget *parent)
     logo_.setMargin(30);
     logo_.setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-    QString aboutString = "The goal of the OpenBOOX project is to provide an "
-                          "alternative firmware version for the Boox60 eReader from Onyx International.\n\n";
+    QString aboutString = tr("The goal of the OpenBOOX project is to provide an "
+                             "alternative firmware version for the Boox60 eReader from Onyx International.\n\n");
 
-    aboutString += tr("Version: %1\n").arg(QString(qgetenv("OBX_VERSION")));
-    aboutString += tr("Build Date: %1\n").arg(QString(qgetenv("OBX_BUILDDATE")));
-    aboutString += tr("Donor Firmware: Boox A60 %1 %2\n\n")
-                   .arg(QString(qgetenv("DONOR_VERSION")))
-                   .arg(QString(qgetenv("DONOR_BUILDDATE")));
-
-    aboutString += tr("Free Space\n");
-    aboutString += tr("    Memory: %1/%2 MB\n")
-                   .arg(sys::systemFreeMemory() / 1048576)
-                   .arg(sys::systemTotalMemory() / 1048576);
-
-    aboutString += tr("    Internal Flash: %1/%2 MB\n")
-                   .arg(sys::freeSpace("/media/flash") / 1048576)
-                   .arg(sys::diskSpace("/media/flash") / 1048576);
-
-    if (obx::isSDMounted())
+    if (mainUI)
     {
-        aboutString += tr("    SD Card: %1/%2 MB\n")
-                       .arg(sys::freeSpace("/media/sd") / 1048576)
-                       .arg(sys::diskSpace("/media/sd") / 1048576);
+        aboutString += tr("Version: %1\n").arg(QString(qgetenv("OBX_VERSION")));
+        aboutString += tr("Build Date: %1\n").arg(QString(qgetenv("OBX_BUILDDATE")));
+        aboutString += tr("Donor Firmware: Boox A60 %1 %2\n\n")
+                       .arg(QString(qgetenv("DONOR_VERSION")))
+                       .arg(QString(qgetenv("DONOR_BUILDDATE")));
+
+        aboutString += tr("Free Space\n");
+        aboutString += tr("    Memory: %1/%2 MB\n")
+                       .arg(sys::systemFreeMemory() / 1048576)
+                       .arg(sys::systemTotalMemory() / 1048576);
+
+        aboutString += tr("    Internal Flash: %1/%2 MB\n")
+                       .arg(sys::freeSpace("/media/flash") / 1048576)
+                       .arg(sys::diskSpace("/media/flash") / 1048576);
+
+        if (FileSystemUtils::isSDMounted())
+        {
+            aboutString += tr("    SD Card: %1/%2 MB\n")
+                           .arg(sys::freeSpace("/media/sd") / 1048576)
+                           .arg(sys::diskSpace("/media/sd") / 1048576);
+        }
+
+        about_.setAlignment(Qt::AlignLeft|Qt::AlignTop);
+    }
+    else
+    {
+        aboutString += tr("\nOpenBOOX Explorer [standalone mode]\n\n"
+                          "The OpenBOOX Explorer is running in standalone mode. "
+                          "If you install the OpenBOOX firmware you can use this explorer as the main user interface. "
+                          "In this case you will get additional functionality and a fully integrated user experience.\n\n"
+                          "http://openbooxproject.sourceforge.net");
+
+        about_.setAlignment(Qt::AlignHCenter|Qt::AlignTop);
     }
 
     QFont text_font(about_.font());
     text_font.setPointSize(20);
     about_.setText(aboutString);
     about_.setFont(text_font);
-    about_.setAlignment(Qt::AlignLeft|Qt::AlignTop);
     about_.setMargin(30);
     about_.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     about_.setWordWrap(true);
@@ -166,7 +179,6 @@ AboutDialog::AboutDialog(QWidget *parent)
     vbox_.addWidget(&title_widget_);
     vbox_.addWidget(&logo_);
     vbox_.addWidget(&about_);
-    vbox_.addWidget(&license_);
     vbox_.addWidget(&status_bar_);
 
     // Connections

@@ -15,43 +15,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ABOUT_DIALOG_H_
-#define ABOUT_DIALOG_H_
-
-#include "onyx/ui/buttons.h"
-#include "onyx/ui/status_bar.h"
-
-using namespace ui;
+#ifndef FILE_SYSTEM_UTILS_H_
+#define FILE_SYSTEM_UTILS_H_
 
 namespace obx
 {
 
-class AboutDialog : public QDialog
+class FileSystemUtils
 {
-    Q_OBJECT
-
 public:
-    AboutDialog(bool mainUI, QWidget *parent = 0);
-    ~AboutDialog();
-
-private:
-    void keyPressEvent(QKeyEvent *ke);
-    void keyReleaseEvent(QKeyEvent *ke);
-
-private:
-    QVBoxLayout    vbox_;
-    QWidget        title_widget_;
-    QHBoxLayout    title_layout_;
-    QLabel         title_icon_;
-    QLabel         title_label_;
-    OnyxPushButton close_button_;
-
-    QLabel         logo_;
-    QLabel         about_;
-
-    StatusBar      status_bar_;
+    static bool copyDir(const QString &source, const QString &destination);
+    static bool removeDir(const QString &dirName);
+    static bool moveDir(const QString &source, const QString &destination);
+    static bool isSDMounted();
+    static bool isScript(const QFileInfo &fileInfo);
+    static bool isElfBinary(const QFileInfo &fileInfo);
+    static bool isRunnable(const QFileInfo &fileInfo);
 };
 
 }
 
-#endif // ABOUT_DIALOG_H_
+#endif // FILE_SYSTEM_UTILS_H_

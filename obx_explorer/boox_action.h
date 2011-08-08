@@ -23,18 +23,19 @@
 namespace obx
 {
 
-class CBooxActions :
-    public ui::BaseActions
+class BooxActions : public ui::BaseActions
 {
     Q_OBJECT
 
-    public:
-        CBooxActions();
+public:
+    BooxActions();
+    ~BooxActions();
 
-    public:
-        void InitializeActions(QIcon icon, QString title);
-        void AddAction(QIcon icon, QString title, int itemKey);
-        int selected();
+public:
+    void initializeActions(QIcon icon, QString title);
+    void addAction(QIcon icon, QString title, int itemKey);
+    void addSeparator();
+    int selected();
 };
 
 }

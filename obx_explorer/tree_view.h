@@ -69,11 +69,13 @@ public:
 Q_SIGNALS:
     void pressed(ObxTreeViewItem *item, const QPoint & press);
     void released(ObxTreeViewItem *item, const QPoint & release);
+    void moved(ObxTreeViewItem *item);
     void clicked(ObxTreeViewItem *item);
 
 private:
     virtual void mousePressEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
+    virtual void mouseMoveEvent(QMouseEvent *);
     virtual void keyPressEvent(QKeyEvent *);
     virtual void keyReleaseEvent(QKeyEvent *);
     virtual void paintEvent(QPaintEvent *);
@@ -108,7 +110,9 @@ public:
     void setModel(QStandardItemModel * model);
     QStandardItem * item(QStandardItem *item, int col);
 
-    int selected();
+    int  selected();
+    void setHovering(bool);
+    bool hovering();
 
 public Q_SLOTS:
     void clear();
@@ -131,6 +135,7 @@ private Q_SLOTS:
     void onItemClicked(ObxTreeViewItem *);
     void onItemPressed(ObxTreeViewItem *, const QPoint &);
     void onItemReleased(ObxTreeViewItem *, const QPoint &);
+    void onItemMoved(ObxTreeViewItem *);
 
 private:
     void createLayout();
@@ -170,6 +175,8 @@ private:
 
     ObxTreeViewItem *pressed_item_;
     QPoint pressed_point_;
+
+    bool hovering_;
 };
 
 }

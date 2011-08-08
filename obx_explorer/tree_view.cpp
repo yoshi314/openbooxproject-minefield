@@ -170,6 +170,7 @@ ObxTreeViewItem::ObxTreeViewItem(QWidget *parent, ObxTreeView & view)
     , view_(view)
 {
     setFixedHeight(ITEM_HEIGHT);
+    setMouseTracking(true);
 }
 
 ObxTreeViewItem::~ObxTreeViewItem()
@@ -200,6 +201,12 @@ void ObxTreeViewItem::mousePressEvent(QMouseEvent *me)
 void ObxTreeViewItem::mouseReleaseEvent(QMouseEvent *me)
 {
     emit released(this, me->globalPos());
+}
+
+void ObxTreeViewItem::mouseMoveEvent(QMouseEvent *me)
+{
+    me->ignore();
+    emit moved(this);
 }
 
 void ObxTreeViewItem::keyPressEvent(QKeyEvent *ke)
@@ -238,10 +245,12 @@ void ObxTreeViewItem::paintEvent(QPaintEvent *)
                 rc.setLeft(rc.left() + obx::indent(item));
             }
 
+            p.setOpacity(item->isSelectable() ? 1.0 : 0.5);
+
             QIcon icon = item->icon();
             p.drawPixmap(8, 8, icon.pixmap(84, 84));
 
-            QString title = item->data(Qt::DisplayRole).toString();
+            QString title = item->text();
             p.setFont(item->font());
             chopStringByRect(p, rc, item->textAlignment()|Qt::AlignTop, title);
             p.drawText(rc, item->textAlignment()|Qt::AlignTop, title);
@@ -257,6 +266,7 @@ void ObxTreeViewItem::paintEvent(QPaintEvent *)
 
     if (isSelected())
     {
+        p.setOpacity(1);
         QPen pen(Qt::SolidLine);
         pen.setColor(Qt::black);
         p.setPen(pen);
@@ -281,6 +291,7 @@ ObxTreeView::ObxTreeView(QWidget *parent, QStandardItemModel * model)
     , views_()
     , pressed_item_(0)
     , pressed_point_()
+    , hovering_(false)
 {
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Base);
@@ -368,6 +379,27 @@ void ObxTreeView::onItemReleased(ObxTreeViewItem *item, const QPoint &point)
     }
 }
 
+void ObxTreeView::onItemMoved(ObxTreeViewItem *item)
+{
+    if (item->data() == 0 || hovering_ == false)
+    {
+        return;
+    }
+
+    ViewItemPtrIter iter;
+    for(iter = views_.begin(); iter != views_.end(); ++iter)
+    {
+        if (iter->get() == item)
+        {
+            int offset = (iter - views_.begin() + first_visible_) - selected();
+            if (offset)
+            {
+                navigate(offset);
+            }
+        }
+    }
+}
+
 void ObxTreeView::setModel(QStandardItemModel * model)
 {
     header_bar_.setModel(model);
@@ -429,6 +461,16 @@ QStandardItem * ObxTreeView::item(int row, int col)
 int ObxTreeView::selected()
 {
     return selected_;
+}
+
+void ObxTreeView::setHovering(bool hovering)
+{
+    hovering_ = hovering;
+}
+
+bool ObxTreeView::hovering()
+{
+    return hovering_;
 }
 
 // Return the level string for the specified row.
@@ -687,6 +729,11 @@ void ObxTreeView::arrangeItems(int first_position,
                 SIGNAL(released(ObxTreeViewItem *, const QPoint&)),
                 this,
                 SLOT(onItemReleased(ObxTreeViewItem *, const QPoint&)));
+
+        connect(view.get(),
+                SIGNAL(moved(ObxTreeViewItem *)),
+                this,
+                SLOT(onItemMoved(ObxTreeViewItem *)));
 
         views_.push_back(view);
         items_layout_.addWidget(view.get(), i, 0);

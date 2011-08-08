@@ -15,43 +15,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ABOUT_DIALOG_H_
-#define ABOUT_DIALOG_H_
-
-#include "onyx/ui/buttons.h"
-#include "onyx/ui/status_bar.h"
-
-using namespace ui;
+#ifndef DATABASE_UTILS_H_
+#define DATABASE_UTILS_H_
 
 namespace obx
 {
 
-class AboutDialog : public QDialog
+class DatabaseUtils
 {
-    Q_OBJECT
-
 public:
-    AboutDialog(bool mainUI, QWidget *parent = 0);
-    ~AboutDialog();
-
-private:
-    void keyPressEvent(QKeyEvent *ke);
-    void keyReleaseEvent(QKeyEvent *ke);
-
-private:
-    QVBoxLayout    vbox_;
-    QWidget        title_widget_;
-    QHBoxLayout    title_layout_;
-    QLabel         title_icon_;
-    QLabel         title_label_;
-    OnyxPushButton close_button_;
-
-    QLabel         logo_;
-    QLabel         about_;
-
-    StatusBar      status_bar_;
+    static int execQueries(const QStringList &queries);
+    static bool clearDatabase();
 };
 
 }
 
-#endif // ABOUT_DIALOG_H_
+#endif // DATABASE_UTILS_H_

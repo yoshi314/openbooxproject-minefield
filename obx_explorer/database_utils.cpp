@@ -15,43 +15,41 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ABOUT_DIALOG_H_
-#define ABOUT_DIALOG_H_
+#include <QStringList>
+#include <QSqlQuery>
 
-#include "onyx/ui/buttons.h"
-#include "onyx/ui/status_bar.h"
-
-using namespace ui;
+#include "database_utils.h"
 
 namespace obx
 {
 
-class AboutDialog : public QDialog
+int DatabaseUtils::execQueries(const QStringList &queries)
 {
-    Q_OBJECT
+    QSqlQuery query;
+    int i = 0;
 
-public:
-    AboutDialog(bool mainUI, QWidget *parent = 0);
-    ~AboutDialog();
+    for (i = 0; i < queries.size(); i++)
+    {
+        if (!query.exec(queries.at(i)))
+        {
+            break;
+        }
+    }
 
-private:
-    void keyPressEvent(QKeyEvent *ke);
-    void keyReleaseEvent(QKeyEvent *ke);
-
-private:
-    QVBoxLayout    vbox_;
-    QWidget        title_widget_;
-    QHBoxLayout    title_layout_;
-    QLabel         title_icon_;
-    QLabel         title_label_;
-    OnyxPushButton close_button_;
-
-    QLabel         logo_;
-    QLabel         about_;
-
-    StatusBar      status_bar_;
-};
-
+    return i;
 }
 
-#endif // ABOUT_DIALOG_H_
+bool DatabaseUtils::clearDatabase()
+{
+    QStringList tables = QSqlDatabase::database().tables();
+    QStringList queries;
+
+    for (int i = 0; i < tables.size(); i++)
+    {
+        queries << QString("DROP TABLE %1").arg(tables.at(i));
+    }
+
+    return (DatabaseUtils::execQueries(queries) == queries.size());
+}
+
+}

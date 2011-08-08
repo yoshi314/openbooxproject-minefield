@@ -22,11 +22,22 @@
 namespace obx
 {
 
-CBooxActions::CBooxActions() : ui::BaseActions()
+BooxActions::BooxActions() : ui::BaseActions()
 {
 }
 
-void CBooxActions::AddAction(QIcon icon, QString title, int itemKey)
+BooxActions::~BooxActions()
+{
+}
+
+void BooxActions::initializeActions(QIcon icon, QString title)
+{
+    clear();
+    category_action_.setIcon(icon);
+    category_action_.setIconText(title);
+}
+
+void BooxActions::addAction(QIcon icon, QString title, int itemKey)
 {
     QAction* newAction=new QAction(icon, title, this);
     newAction->setCheckable(true);
@@ -34,19 +45,21 @@ void CBooxActions::AddAction(QIcon icon, QString title, int itemKey)
     actions_.push_back(shared_ptr<QAction>(newAction));
 }
 
-void CBooxActions::InitializeActions(QIcon icon, QString title)
+void BooxActions::addSeparator()
 {
-    clear();
-    category_action_.setIcon(icon);
-    category_action_.setIconText(title);
+    shared_ptr<QAction> separator(new QAction(exclusiveGroup()));
+    separator->setSeparator(true);
+    actions_.push_back(separator);
 }
 
-int CBooxActions::selected()
+int BooxActions::selected()
 {
     for (unsigned int i = 0; i < actions_.size(); i++)
     {
         if (actions_[i]->isChecked())
+        {
             return actions_[i]->property("key").toInt();
+        }
     }
 
     return -1;
