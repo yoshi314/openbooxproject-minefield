@@ -25,6 +25,7 @@ menuconfig GRAPHIC_SUPPORT
 if GRAPHIC_SUPPORT
 source "packages/qt/Config.in"
 source "packages/onyx/Config.in"
+source "packages/poppler/Config.in"
 endif
 menuconfig HW_SUPPORT
         bool "Hardware handling libraries and applications"
@@ -50,6 +51,7 @@ source "packages/sqlite/Config.in"
 source "packages/curl/Config.in"
 source "packages/expat/Config.in"
 source "packages/freetype/Config.in"
+source "packages/fontconfig/Config.in"
 source "packages/libiconv/Config.in"
 endif
 endmenu

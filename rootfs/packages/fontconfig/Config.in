@@ -1,0 +1,8 @@
+config PACKAGE_FONTCONFIG
+	bool "fontconfig"
+	select PACKAGE_FREETYPE
+	default y
+	help
+
+	http://www.fontconfig.org/
+

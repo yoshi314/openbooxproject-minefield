@@ -37,7 +37,7 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a/code/src/ui/onyx_ui_images.qrc onyx-intl-boo
  </RCC>
 diff -ruN onyx-intl-booxsdk-a0c3c9a/code/src/ui/status_bar.cpp onyx-intl-booxsdk-a0c3c9a.obx/code/src/ui/status_bar.cpp
 --- onyx-intl-booxsdk-a0c3c9a/code/src/ui/status_bar.cpp	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a.obx/code/src/ui/status_bar.cpp	2011-05-24 19:29:18.523396037 +0200
++++ onyx-intl-booxsdk-a0c3c9a.obx/code/src/ui/status_bar.cpp	2011-08-07 14:08:28.000000000 +0200
 @@ -146,6 +146,19 @@
      return false;
  }
@@ -58,6 +58,43 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a/code/src/ui/status_bar.cpp onyx-intl-booxsdk
  void StatusBar::showItem(StatusBarItemType id, bool show)
  {
      StatusBarItem *ptr = item(id, false);
+@@ -172,12 +185,6 @@
+         wnd->setProgress(value, total, show_message, message);
+     }
+ 
+-    if (show_message && (ptr = item(MESSAGE, false)))
+-    {
+-        StatusBarItemMessage *wnd = static_cast<StatusBarItemMessage*>(ptr);
+-        wnd->setMessage(value, total);
+-    }
+-
+     ptr = item(CLOCK, false);
+     if (ptr)
+     {
+@@ -256,12 +263,6 @@
+ {
+     onyx::screen::instance().enableUpdate(false);
+     StatusBarItem *ptr = item(MESSAGE, false);
+-    if (ptr)
+-    {
+-        StatusBarItemMessage *wnd = static_cast<StatusBarItemMessage*>(ptr);
+-        wnd->setMessage(current, total);
+-        wnd->repaint();
+-    }
+ 
+     ptr = item(PROGRESS, false);
+     if (ptr)
+@@ -640,6 +641,10 @@
+         item = new StatusBarItemMenu(this);
+         connect(item, SIGNAL(clicked()), this, SLOT(onMenuClicked()));
+         break;
++    case MESSAGE:
++        item = new StatusBarItemMessage(this);
++        connect(item, SIGNAL(clicked()), this, SLOT(onMessageAreaClicked()));
++        break;
+     case BATTERY:
+         item = new StatusBarItemBattery(this);
+         connect(item, SIGNAL(clicked()), this, SLOT(onBatteryClicked()));
 diff -ruN onyx-intl-booxsdk-a0c3c9a/code/src/ui/system_actions.cpp onyx-intl-booxsdk-a0c3c9a.obx/code/src/ui/system_actions.cpp
 --- onyx-intl-booxsdk-a0c3c9a/code/src/ui/system_actions.cpp	2011-04-18 06:54:03.000000000 +0200
 +++ onyx-intl-booxsdk-a0c3c9a.obx/code/src/ui/system_actions.cpp	2011-05-24 19:29:18.524396027 +0200

@@ -17,6 +17,7 @@ $(UNYAFFS_DIR)/unyaffs:$(UNYAFFS_DIR)/.unpacked
 	$(MAKE) CC=$(HOSTCC) -C $(UNYAFFS_DIR) all
 
 $(HOST_DIR)/usr/bin/unyaffs:$(UNYAFFS_DIR)/unyaffs
+	mkdir -p $(HOST_DIR)/usr/bin
 	cp -dpf $(UNYAFFS_DIR)/unyaffs $(HOST_DIR)/usr/bin
 	touch -c $(HOST_DIR)/usr/bin/unyaffs
 

@@ -16,9 +16,7 @@ $(QT_DIR)/.patched:$(QT_DIR)/.unpacked
 $(QT_DIR)/.configured:$(QT_DIR)/.patched
 	(cd $(QT_DIR); \
 		export QTDIR=$(QT_DIR); \
-		export PKG_CONFIG_PATH=$(HOST_DIR)$(EPREFIX)/lib/pkgconfig; \
-		echo QMAKE_INCDIR=$(HOST_DIR)$(EPREFIX)/include >> $(QT_DIR)/mkspecs/qws/linux-arm-g++/qmake.conf; \
-		echo QMAKE_LIBDIR=$(HOST_DIR)$(EPREFIX)/lib >> $(QT_DIR)/mkspecs/qws/linux-arm-g++/qmake.conf; \
+		export PKG_CONFIG_PATH=$(EPREFIX)/lib/pkgconfig; \
 		(echo o;echo yes) | ./configure \
 			-prefix $(EPREFIX) \
 			-release \

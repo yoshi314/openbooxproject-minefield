@@ -1,0 +1,5 @@
+config PACKAGE_POPPLER
+	bool "poppler"
+	default y
+	help
+	 poppler is a PDF rendering library based on the xpdf-3.0 code base
