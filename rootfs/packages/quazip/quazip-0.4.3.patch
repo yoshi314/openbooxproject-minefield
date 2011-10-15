@@ -1,0 +1,7 @@
+diff -ruN quazip-0.4.3.org/quazip.pro quazip-0.4.3/quazip.pro
+--- quazip-0.4.3.org/quazip.pro	2010-07-23 19:45:40.000000000 +0200
++++ quazip-0.4.3/quazip.pro	2011-09-13 17:00:03.000000000 +0200
+@@ -1,2 +1,2 @@
+ TEMPLATE=subdirs
+-SUBDIRS=quazip test/unzip test/zip test/jlcompress test/checksum
++SUBDIRS=quazip

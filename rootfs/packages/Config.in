@@ -26,6 +26,7 @@ if GRAPHIC_SUPPORT
 source "packages/qt/Config.in"
 source "packages/onyx/Config.in"
 source "packages/poppler/Config.in"
+source "packages/quazip/Config.in"
 endif
 menuconfig HW_SUPPORT
         bool "Hardware handling libraries and applications"

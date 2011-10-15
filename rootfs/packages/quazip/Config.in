@@ -1,0 +1,6 @@
+config PACKAGE_QUAZIP
+	bool "quazip"
+	default y
+	help
+	 QuaZIP is a simple C++ wrapper over Gilles Vollant's ZIP/UNZIP package
+	 that can be used to access ZIP archives
