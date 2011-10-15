@@ -60,7 +60,7 @@ $(TARGET_DIR)$(EPREFIX)/lib/libpoppler-qt4.so: $(HOST_DIR)$(EPREFIX)/lib/libpopp
 	-$(TARGET_STRIP) $(TARGET_DIR)$(EPREFIX)/lib/libpoppler-qt4.so*
 	touch -c $(TARGET_DIR)$(EPREFIX)/lib/libpoppler-qt4.so
 
-poppler: fontconfig $(TARGET_DIR)$(EPREFIX)/lib/libpoppler-qt4.so
+poppler: fontconfig qt $(TARGET_DIR)$(EPREFIX)/lib/libpoppler-qt4.so
 
 poppler-clean:
 	$(MAKE) DESTDIR=$(HOST_DIR) CC=$(TARGET_CC) -C $(POPPLER_DIR) uninstall
