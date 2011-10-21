@@ -1,0 +1,8 @@
+build/
+dl/
+host/
+images/
+kernel/
+dl
+.config*
+*~

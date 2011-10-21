@@ -49,7 +49,7 @@ $(YAFFS2_TARGET): fakeroot makedevs mkyaffs2image
 		-s $(YAFFS2_IMAGE_LOCATION)/fakeroot.env.00000 -- \
 		$(HOST_DIR)/usr/bin/mkyaffs2image \
 		$(BUILD_DIR)/root \
-		$(YAFFS2_TARGET) > rootfs.log 2>&1
+		$(YAFFS2_TARGET) > $(YAFFS2_IMAGE_LOCATION)/$(IMAGE_LOCATION)/rootfs.log 2>&1
 	@ls -l $(YAFFS2_TARGET)
 
 YAFFS2_COPYTO := $(strip $(subst ",,$(TARGET_ROOTFS_YAFFS2_COPYTO)))
