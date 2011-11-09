@@ -22,6 +22,8 @@ target-skel: onyx-binaries
 	mv $(TARGET_DIR)/etc/version $(TARGET_DIR)/etc/version.org
 	packages/dependencies/version.sh $(TARGET_DIR)/etc/version.org $(OBX_VERSION) > $(TARGET_DIR)/etc/version
 	rm $(TARGET_DIR)/etc/version.org
+	mkdir -p $(TARGET_DIR)/usr/share/explorer/images/screen_saver
+	mv $(TARGET_DIR)/usr/share/system_manager/images/*.png $(TARGET_DIR)/usr/share/explorer/images/screen_saver
 	-find $(TARGET_DIR) -type d -name CVS | xargs rm -rf
 
 dependencies-source:

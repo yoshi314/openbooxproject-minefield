@@ -1,0 +1,5 @@
+config PACKAGE_OBX_EXPLORER
+	bool "obx_explorer"
+	default y
+	help
+	 OpenBOOX Explorer

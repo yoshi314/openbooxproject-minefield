@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "export EXPLORER=/opt/onyx/arm/bin/explorer" > /tmp/explorer
+echo "export OPTION=" >> /tmp/explorer
+
+killall system_manager

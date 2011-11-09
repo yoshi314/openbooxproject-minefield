@@ -2,19 +2,19 @@
 
 root_files="web_browser.db notes_template notes"
 
-if [ -f /root/Settings/explorer ]; then
-    . /root/Settings/explorer
-fi
-
-sleep 1
-
-if [ ! -f "$EXPLORER" ]; then
-    EXPLORER=explorer
-    OPTION=""
-fi
-
 while true
 do
+    if [ -f /tmp/explorer ]; then
+        . /tmp/explorer
+    fi
+
+    sleep 1
+
+    if [ ! -f "$EXPLORER" ]; then
+        EXPLORER=/opt/onyx/arm/bin/obx_explorer
+        OPTION="--mainui"
+    fi
+
     system_manager -qws -shell="$EXPLORER $OPTION"
 
     # system_manager crashes
