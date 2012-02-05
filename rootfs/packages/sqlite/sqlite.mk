@@ -16,6 +16,8 @@ $(SQLITE_DIR)/libsqlite3.so.0.8.6:$(SQLITE_DIR)/.unpacked
 	(cd $(SQLITE_DIR);ln -s libsqlite3.so.0.8.6 libsqlite3.so)
 
 $(HOST_DIR)$(EPREFIX)/lib/libsqlite3.so.0.8.6:$(SQLITE_DIR)/libsqlite3.so.0.8.6
+	cp -dpf $(SQLITE_DIR)/sqlite3.h $(HOST_DIR)$(EPREFIX)/include
+	cp -dpf $(SQLITE_DIR)/sqlite3ext.h $(HOST_DIR)$(EPREFIX)/include
 	cp -dpf $(SQLITE_DIR)/libsqlite3.so* $(HOST_DIR)$(EPREFIX)/lib
 	touch -c $(HOST_DIR)$(EPREFIX)/lib/libsqlite3.so.0.8.6
 

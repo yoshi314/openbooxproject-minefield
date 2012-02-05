@@ -1,0 +1,6 @@
+config PACKAGE_MPD
+	bool "Music Player Daemon (MPD)"
+	default n
+	help
+	  Music Player Daemon is a flexible, powerful,
+	  server-side application for playing music.

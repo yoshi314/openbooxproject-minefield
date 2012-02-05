@@ -29,6 +29,18 @@ source "packages/poppler/Config.in"
 source "packages/quazip/Config.in"
 source "packages/obx/Config.in"
 endif
+menuconfig AUDIO_SUPPORT
+        bool "Audio libraries and applications"
+        default y
+        help
+          Support for audio libraries, codecs, and related packages
+if AUDIO_SUPPORT
+source "packages/alsa/Config.in"
+source "packages/libmad/Config.in"
+source "packages/libid3tag/Config.in"
+source "packages/flac/Config.in"
+source "packages/mpd/Config.in"
+endif
 menuconfig HW_SUPPORT
         bool "Hardware handling libraries and applications"
         default y
@@ -55,5 +67,6 @@ source "packages/expat/Config.in"
 source "packages/freetype/Config.in"
 source "packages/fontconfig/Config.in"
 source "packages/libiconv/Config.in"
+source "packages/glib/Config.in"
 endif
 endmenu

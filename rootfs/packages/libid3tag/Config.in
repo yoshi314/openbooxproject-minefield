@@ -1,0 +1,5 @@
+config PACKAGE_LIBID3TAG 
+    bool "ID3 tag manipulation library"
+    default n
+    help
+      the libid3tag lib is used by mp3 players to get the metadata of the mp3 file.

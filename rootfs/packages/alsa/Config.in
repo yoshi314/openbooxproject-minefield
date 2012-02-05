@@ -1,0 +1,7 @@
+config PACKAGE_ALSA_LIB
+    bool "ALSA library"
+    default n
+    help
+      ALSA provides audio and MIDI functionality to the Linux operating system.
+      User space library (alsa-lib) to simplify application programming
+      and provide higher level functionality.

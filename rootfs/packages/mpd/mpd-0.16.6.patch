@@ -1,0 +1,10 @@
+--- mpd-0.16.6/src/inotify_queue.c~	2011-11-26 18:10:49.958298380 +0100
++++ mpd-0.16.6/src/inotify_queue.c	2011-11-26 18:10:49.974298451 +0100
+@@ -20,6 +20,7 @@
+ #include "config.h"
+ #include "inotify_queue.h"
+ #include "update.h"
++#include "glib_compat.h"
+ 
+ #include <glib.h>
+ 

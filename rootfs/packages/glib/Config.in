@@ -1,0 +1,8 @@
+config PACKAGE_GLIB
+	bool "glib"
+	default n
+	help
+	  Low-level core library that forms the basis of GTK+ and GNOME.
+
+	  http://www.gtk.org/
+
