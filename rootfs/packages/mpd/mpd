@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2006 Freescale Semiconductor, Inc.
+# Copyright 2012 OpenBOOX
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -8,7 +8,19 @@
 # (at your option) any later version.
 
 PATH="/sbin:/bin:/usr/sbin:/usr/bin"
+MPDDIR=/root/.mpd
 export LD_LIBRARY_PATH=/opt/onyx/arm/lib
+
+check_config()
+{
+    if [ ! -d "$MPDDIR" ]; then
+        rm -f $MPDDIR
+        mkdir -p $MPDDIR/music
+        mkdir -p $MPDDIR/playlists
+        ln -s /media/flash/music $MPDDIR/music/flash
+        ln -s /media/sd/music $MPDDIR/music/sd
+    fi
+}
 
 case "$1" in
     restart)
@@ -18,11 +30,12 @@ case "$1" in
     start)
         echo "Starting mpd server"
         modprobe snd-soc-imx-3stack-wm8711
+        check_config
         mpd
         ;;
     stop)
         echo "Stopping mpd server"
-        modprobe -r snd-soc-imx-3stack-wm8711
         killall mpd
+        modprobe -r snd-soc-imx-3stack-wm8711
         ;;
 esac

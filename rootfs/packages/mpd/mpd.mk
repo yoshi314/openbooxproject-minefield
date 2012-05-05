@@ -3,8 +3,8 @@
 # Music Player Daemon (MPD)
 #
 #############################################################
-MPD_SOURCE=mpd-0.16.6.tar.bz2
-MPD_DIR:=$(BUILD_DIR)/mpd-0.16.6
+MPD_SOURCE=mpd-0.16.8.tar.bz2
+MPD_DIR:=$(BUILD_DIR)/mpd-0.16.8
 
 $(DL_DIR)/$(MPD_SOURCE):
 	$(WGET) -P $(DL_DIR) $(DOWNLOAD_SITE)/$(MPD_SOURCE)
@@ -49,15 +49,17 @@ $(TARGET_DIR)/usr/bin/mpd: $(MPD_DIR)/src/mpd
 	cp -dpf $(MPD_DIR)/src/mpd $(TARGET_DIR)/usr/bin
 	-$(TARGET_STRIP) $(TARGET_DIR)/usr/bin/mpd
 	cp -dpf $(BASE_DIR)/packages/mpd/mpd.conf $(TARGET_DIR)/etc
+	cp -dpf $(BASE_DIR)/packages/mpd/mpd $(TARGET_DIR)/etc/rc.d/init.d
 	touch -c $(TARGET_DIR)/usr/bin/mpd
 
-mpd: curl libmad libid3tag flac sqlite alsa_lib $(TARGET_DIR)/usr/bin/mpd
+mpd: glib curl libmad libid3tag flac sqlite alsa_lib $(TARGET_DIR)/usr/bin/mpd
 
 mpd-source: $(DL_DIR)/$(MPD_SOURCE)
 
 mpd-clean:
 	-$(MAKE) -C $(MPD_DIR) clean
 	-@rm -f $(TARGET_DIR)/usr/bin/mpd
+	-@rm -f $(TARGET_DIR)/etc/rc.d/init.d/mpd
 
 mpd-dirclean:
 	rm -rf $(MPD_DIR)

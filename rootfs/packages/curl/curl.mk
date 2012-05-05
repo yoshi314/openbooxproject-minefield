@@ -29,7 +29,7 @@ $(CURL_DIR)/.configured: $(CURL_DIR)/.unpacked
 		--includedir=$(EPREFIX)/include \
 		--localstatedir=/var \
 		--datarootdir=/usr/share \
-		--with-zlib=$(HOST_DIR)$(EPREFIX) \
+		--with-zlib=$(EPREFIX) \
 		--without-libidn \
 		--without-ssl \
 		--without-krb4 \
@@ -48,10 +48,6 @@ $(CURL_DIR)/lib/.libs/libcurl.so: $(CURL_DIR)/.configured
 
 $(HOST_DIR)$(EPREFIX)/lib/libcurl.so: $(CURL_DIR)/lib/.libs/libcurl.so
 	$(MAKE) DESTDIR=$(HOST_DIR) -C $(CURL_DIR) install
-
-	mv $(HOST_DIR)$(EPREFIX)/lib/libcurl.la $(HOST_DIR)$(EPREFIX)/lib/libcurl.la.old
-	$(SED) "s,^libdir=.*,libdir=\'$(HOST_DIR)$(EPREFIX)/lib\',g" $(HOST_DIR)$(EPREFIX)/lib/libcurl.la.old > $(HOST_DIR)$(EPREFIX)/lib/libcurl.la
-
 	touch -c $(HOST_DIR)$(EPREFIX)/lib/libcurl.so
 
 $(TARGET_DIR)$(EPREFIX)/lib/libcurl.so: $(HOST_DIR)$(EPREFIX)/lib/libcurl.so

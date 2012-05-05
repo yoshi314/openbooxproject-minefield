@@ -16,10 +16,10 @@ case "$1" in
         ;;
     start)
         echo "Starting telnet server"
-	telnetd -l /bin/login
+        telnetd -l /bin/login
         ;;
     stop)
         echo "Stopping telnet server"
-	killall telnetd
+        killall telnetd
         ;;
 esac
