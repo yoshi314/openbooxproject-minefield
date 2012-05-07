@@ -3,8 +3,8 @@
 # Onyx binaries
 #
 #############################################################
-ONYX_BINARIES_SOURCE=onyx-intl-boox-binaries-1.5.1-20110418.tar.gz
-ONYX_BINARIES_DIR := $(BUILD_DIR)/onyx-intl-boox-binaries-1.5.1-20110418
+ONYX_BINARIES_SOURCE=onyx-intl-boox-binaries-1.6-20111128.tar.gz
+ONYX_BINARIES_DIR := $(BUILD_DIR)/onyx-intl-boox-binaries-1.6-20111128
 
 $(DL_DIR)/$(ONYX_BINARIES_SOURCE):
 	$(WGET) -P $(DL_DIR) $(DOWNLOAD_SITE)/$(ONYX_BINARIES_SOURCE)

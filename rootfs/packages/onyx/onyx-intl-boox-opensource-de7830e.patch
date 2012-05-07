@@ -1,6 +1,6 @@
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/CMakeLists.txt	2011-05-15 12:29:22.795911519 +0200
+diff -ruN onyx-intl-boox-opensource-de7830e.org/CMakeLists.txt onyx-intl-boox-opensource-de7830e/CMakeLists.txt
+--- onyx-intl-boox-opensource-de7830e.org/CMakeLists.txt	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/CMakeLists.txt	2012-02-11 14:27:59.163263677 +0100
 @@ -1,6 +1,24 @@
  cmake_minimum_required(VERSION 2.6)
  
@@ -62,10 +62,74 @@ diff -ruN onyx-intl-boox-opensource-3067ba6.org/CMakeLists.txt onyx-intl-boox-op
  
  add_subdirectory(code/src)
 -add_subdirectory(third_party)
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/dictionary_tool/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/dictionary_tool/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/code/src/dictionary_tool/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/dictionary_tool/CMakeLists.txt	2011-05-15 12:29:22.795911519 +0200
-@@ -10,14 +10,12 @@
+diff -ruN onyx-intl-boox-opensource-de7830e.org/code/src/calculator/CMakeLists.txt onyx-intl-boox-opensource-de7830e/code/src/calculator/CMakeLists.txt
+--- onyx-intl-boox-opensource-de7830e.org/code/src/calculator/CMakeLists.txt	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/code/src/calculator/CMakeLists.txt	2012-02-11 14:40:14.946283046 +0100
+@@ -7,9 +7,8 @@
+ FILE(GLOB SRCS *.cpp)
+ SET(SRCS ${HDRS} ${SRCS} ${MOC_SRCS})
+ 
+-ADD_EXECUTABLE(calculator.oar main.cpp ${SRCS})
+-TARGET_LINK_LIBRARIES(calculator.oar
+-  onyxapp
++ADD_EXECUTABLE(calculator main.cpp ${SRCS})
++TARGET_LINK_LIBRARIES(calculator
+   onyx_data
+   onyx_screen
+   onyx_ui
+diff -ruN onyx-intl-boox-opensource-de7830e.org/code/src/calendar/CMakeLists.txt onyx-intl-boox-opensource-de7830e/code/src/calendar/CMakeLists.txt
+--- onyx-intl-boox-opensource-de7830e.org/code/src/calendar/CMakeLists.txt	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/code/src/calendar/CMakeLists.txt	2012-02-11 14:41:13.928284676 +0100
+@@ -7,9 +7,8 @@
+ FILE(GLOB SRCS *.cpp)
+ SET(SRCS ${HDRS} ${SRCS} ${MOC_SRCS})
+ 
+-ADD_EXECUTABLE(calendar.oar main.cpp ${SRCS})
+-TARGET_LINK_LIBRARIES(calendar.oar
+-  onyxapp
++ADD_EXECUTABLE(calendar main.cpp ${SRCS})
++TARGET_LINK_LIBRARIES(calendar
+   onyx_data
+   onyx_screen
+   onyx_ui
+diff -ruN onyx-intl-boox-opensource-de7830e.org/code/src/clock/CMakeLists.txt onyx-intl-boox-opensource-de7830e/code/src/clock/CMakeLists.txt
+--- onyx-intl-boox-opensource-de7830e.org/code/src/clock/CMakeLists.txt	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/code/src/clock/CMakeLists.txt	2012-02-11 14:42:08.453285514 +0100
+@@ -7,9 +7,8 @@
+ FILE(GLOB SRCS *.cpp)
+ SET(SRCS ${HDRS} ${SRCS} ${MOC_SRCS})
+ 
+-ADD_EXECUTABLE(clock.oar main.cpp ${SRCS})
+-TARGET_LINK_LIBRARIES(clock.oar
+-  onyxapp
++ADD_EXECUTABLE(clock main.cpp ${SRCS})
++TARGET_LINK_LIBRARIES(clock
+   onyx_data
+   onyx_screen
+   onyx_ui
+diff -ruN onyx-intl-boox-opensource-de7830e.org/code/src/CMakeLists.txt onyx-intl-boox-opensource-de7830e/code/src/CMakeLists.txt
+--- onyx-intl-boox-opensource-de7830e.org/code/src/CMakeLists.txt	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/code/src/CMakeLists.txt	2012-02-11 14:28:58.488268332 +0100
+@@ -2,7 +2,7 @@
+ add_subdirectory(dictionary_tool)
+ add_subdirectory(djvu_reader)
+ add_subdirectory(fbreader_onyx)
+-add_subdirectory(music_player)
++#add_subdirectory(music_player)
+ add_subdirectory(sudoku)
+ #add_subdirectory(feed_reader)
+ add_subdirectory(calculator)
+@@ -12,5 +12,5 @@
+ add_subdirectory(calendar)
+ #add_subdirectory(podofo)
+ add_subdirectory(gomoku)
+-add_subdirectory(pdf_tools)
++#add_subdirectory(pdf_tools)
+ 
+diff -ruN onyx-intl-boox-opensource-de7830e.org/code/src/dictionary_tool/CMakeLists.txt onyx-intl-boox-opensource-de7830e/code/src/dictionary_tool/CMakeLists.txt
+--- onyx-intl-boox-opensource-de7830e.org/code/src/dictionary_tool/CMakeLists.txt	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/code/src/dictionary_tool/CMakeLists.txt	2012-02-11 14:27:59.165263888 +0100
+@@ -10,7 +10,6 @@
  
  ADD_EXECUTABLE(dict_tool ${SRCS})
  TARGET_LINK_LIBRARIES(dict_tool
@@ -73,16 +137,9 @@ diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/dictionary_tool/CMakeLi
    dictionary
    tts
    sound
-   onyx_data
-   onyx_screen
-   onyx_ui
--  private_conf
-   ${QT_LIBRARIES}
-   ${ADD_LIB}
- )
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/djvu_reader/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/djvu_reader/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/code/src/djvu_reader/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/djvu_reader/CMakeLists.txt	2011-05-15 12:29:22.796911566 +0200
+diff -ruN onyx-intl-boox-opensource-de7830e.org/code/src/djvu_reader/CMakeLists.txt onyx-intl-boox-opensource-de7830e/code/src/djvu_reader/CMakeLists.txt
+--- onyx-intl-boox-opensource-de7830e.org/code/src/djvu_reader/CMakeLists.txt	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/code/src/djvu_reader/CMakeLists.txt	2012-02-11 14:27:59.165263888 +0100
 @@ -24,5 +24,7 @@
    onyx_screen
    onyx_ui
@@ -91,181 +148,35 @@ diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/djvu_reader/CMakeLists.
 +  tts
    ${iconv_lib}
    ${QT_LIBRARIES})
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/djvu_reader/libdjvu/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/djvu_reader/libdjvu/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/code/src/djvu_reader/libdjvu/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/djvu_reader/libdjvu/CMakeLists.txt	2011-05-15 12:29:22.796911566 +0200
-@@ -120,6 +120,8 @@
- XMLTags.cpp
- ZPCodec.cpp)
+diff -ruN onyx-intl-boox-opensource-de7830e.org/code/src/fbreader_onyx/CMakeLists.txt onyx-intl-boox-opensource-de7830e/code/src/fbreader_onyx/CMakeLists.txt
+--- onyx-intl-boox-opensource-de7830e.org/code/src/fbreader_onyx/CMakeLists.txt	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/code/src/fbreader_onyx/CMakeLists.txt	2012-02-11 14:27:59.166263989 +0100
+@@ -141,7 +141,6 @@
+   onyx_sys
+   wv2
+   crypto
+-  cryptopenssl
+   ${ADD_LIB}
+   ${QT_LIBRARIES})
+ link_iconv(onyx_reader)
+diff -ruN onyx-intl-boox-opensource-de7830e.org/code/src/gomoku/CMakeLists.txt onyx-intl-boox-opensource-de7830e/code/src/gomoku/CMakeLists.txt
+--- onyx-intl-boox-opensource-de7830e.org/code/src/gomoku/CMakeLists.txt	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/code/src/gomoku/CMakeLists.txt	2012-02-11 14:42:45.503286319 +0100
+@@ -11,9 +11,8 @@
+ SET(RESOURCE_SRCS images.qrc)
+ QT4_ADD_RESOURCES(IMAGES_RES ${RESOURCE_SRCS})
  
--ADD_LIBRARY(djvulibre ${HDRS} ${SRCS})
--
--
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	ADD_LIBRARY(djvulibre ${HDRS} ${SRCS})
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	ADD_LIBRARY(djvulibre SHARED ${HDRS} ${SRCS})
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/bzip2/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/bzip2/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/bzip2/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/bzip2/CMakeLists.txt	2011-05-15 12:29:22.797911612 +0200
-@@ -12,5 +12,8 @@
- ADD_DEFINITIONS(-D_FILE_OFFSET_BITS=64)
- 
- # bzip2 library.
--ADD_LIBRARY(bz2 ${SRCS})
--
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	ADD_LIBRARY(bz2 ${SRCS})
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	ADD_LIBRARY(bz2 SHARED ${SRCS})
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/CMakeLists.txt	2011-05-15 12:29:22.798911657 +0200
-@@ -13,7 +13,13 @@
- # linebreak library
- FILE(GLOB_RECURSE linebreak_headers linebreak/*.h)
- FILE(GLOB_RECURSE linebreak_srcs linebreak/*.c)
--add_library(linebreak  ${linebreak_headers} ${linebreak_srcs})
-+
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(linebreak  ${linebreak_headers} ${linebreak_srcs})
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(linebreak  SHARED ${linebreak_headers} ${linebreak_srcs})
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+
- INCLUDE_DIRECTORIES(linebreak)
- 
- # fribidi library
-@@ -28,11 +34,12 @@
-     FILE(GLOB_RECURSE fribidi_charset_srcs fribidi/charset/*.c)
-     FILE(GLOB_RECURSE fribidi_headers fribidi/lib/*.h)
-     FILE(GLOB_RECURSE fribidi_srcs fribidi/lib/*.c)
--    add_library(fribidi
--      ${fribidi_charset_headers}
--      ${fribidi_charset_srcs}
--      ${fribidi_headers}
--      ${fribidi_srcs})
-+
-+	IF (ONYX_BUILD_STATIC_LIB)
-+		add_library(fribidi ${fribidi_charset_headers} ${fribidi_charset_srcs} ${fribidi_headers} ${fribidi_srcs})
-+	ELSE (ONYX_BUILD_STATIC_LIB)
-+		add_library(fribidi SHARED ${fribidi_charset_headers} ${fribidi_charset_srcs} ${fribidi_headers} ${fribidi_srcs})
-+	ENDIF (ONYX_BUILD_STATIC_LIB)
- ENDIF(NOT WIN32)
- 
- 
-@@ -123,9 +130,11 @@
- ADD_DEFINITIONS(-DAPPIMAGEDIR="app")
- ADD_DEFINITIONS(-DUNICODE)
- 
--ADD_library(fb_reader
--  ${fbreader_headers} ${fbreader_srcs}
--  )
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	ADD_library(fb_reader ${fbreader_headers} ${fbreader_srcs})
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	ADD_library(fb_reader SHARED ${fbreader_headers} ${fbreader_srcs})
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
- 
- QT4_WRAP_CPP(moc_onyx_reader_app_srcs zlibrary/ui/src/qt4/library/ZLibrary.h)
- 
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/wv2-0.4.2/src/CMakeLists.txt	2011-05-15 12:29:22.799911700 +0200
-@@ -75,5 +75,10 @@
-     pole.h
-     )
- 
--ADD_LIBRARY( wv2 STATIC ${wv2_SOURCES} ${wv2_HEADERS} )
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	ADD_LIBRARY( wv2 STATIC ${wv2_SOURCES} ${wv2_HEADERS} )
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	ADD_LIBRARY( wv2 SHARED ${wv2_SOURCES} ${wv2_HEADERS} )
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+
- TARGET_LINK_LIBRARIES( wv2 ${ICONV_LIBRARIES} ${ZLIB_LIBRARIES} )
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/zlibrary/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/zlibrary/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/code/src/fbreader_onyx/zlibrary/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/fbreader_onyx/zlibrary/CMakeLists.txt	2011-05-15 12:29:22.799911700 +0200
-@@ -139,11 +139,22 @@
-     ${zlibrary_core_desktop_dlg_srcs}
- )
- 
--add_library(zlibrary
--  ${zlibrary_core_hdrs} ${zlibrary_core_srcs}
--  ${zlibrary_ui_qt4_hdrs} ${zlibrary_ui_qt4_srcs}
--  ${zlibrary_ui_sys_hdrs} ${zlibrary_ui_sys_srcs}
--  ${zlibrary_text_headers} ${zlibrary_text_srcs}
--  ${zlibrary_ui_sys_headers} ${ZLIBRARY_ui_sys_srcs}
--  ${moc_zlibrary_ui_srcs})
--target_link_libraries(zlibrary ${QT_LIBRARIES} )
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(zlibrary
-+	  ${zlibrary_core_hdrs} ${zlibrary_core_srcs}
-+	  ${zlibrary_ui_qt4_hdrs} ${zlibrary_ui_qt4_srcs}
-+	  ${zlibrary_ui_sys_hdrs} ${zlibrary_ui_sys_srcs}
-+	  ${zlibrary_text_headers} ${zlibrary_text_srcs}
-+	  ${zlibrary_ui_sys_headers} ${ZLIBRARY_ui_sys_srcs}
-+	  ${moc_zlibrary_ui_srcs})
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(zlibrary SHARED
-+	  ${zlibrary_core_hdrs} ${zlibrary_core_srcs}
-+	  ${zlibrary_ui_qt4_hdrs} ${zlibrary_ui_qt4_srcs}
-+	  ${zlibrary_ui_sys_hdrs} ${zlibrary_ui_sys_srcs}
-+	  ${zlibrary_text_headers} ${zlibrary_text_srcs}
-+	  ${zlibrary_ui_sys_headers} ${ZLIBRARY_ui_sys_srcs}
-+	  ${moc_zlibrary_ui_srcs})
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+
-+target_link_libraries(zlibrary ${QT_LIBRARIES})
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/feed_reader/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/feed_reader/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/code/src/feed_reader/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/feed_reader/CMakeLists.txt	2011-05-15 12:29:22.800911742 +0200
-@@ -13,7 +13,8 @@
-   widget_updater.h
- )
- 
--add_library(feed_reader_lib feed_action.cpp
-+SET(SRCS
-+  feed_action.cpp
-   add_feed_dialog.cpp
-   article.cpp
-   article_list_model.cpp
-@@ -32,6 +33,12 @@
-   ${MOC_SRCS}
- )
- 
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(feed_reader_lib ${SRCS})
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(feed_reader_lib SHARED ${SRCS})
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+
- set(ONYX_LIBS onyx_sys onyx_ui onyx_wireless onyx_wpa onyx_screen onyx_data onyx_cms)
- 
- target_link_libraries(feed_reader_lib  ${QT_LIBRARIES} ${ONYX_LIBS} ${feedreader})
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/music_player/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/music_player/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/code/src/music_player/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/music_player/CMakeLists.txt	2011-05-15 12:29:22.801911783 +0200
-@@ -53,7 +53,12 @@
- 
- QT4_ADD_RESOURCES(MUSIC_PLAYER_RES music_player.qrc)
- 
--ADD_LIBRARY(music_player_lib ${SRCS} ${MUSIC_PLAYER_RES})
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	ADD_LIBRARY(music_player_lib ${SRCS} ${MUSIC_PLAYER_RES})
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	ADD_LIBRARY(music_player_lib SHARED ${SRCS} ${MUSIC_PLAYER_RES})
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+
- TARGET_LINK_LIBRARIES(music_player_lib
-    onyx_screen
-    sound
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/music_player/libcurl/curl/curlbuild.h onyx-intl-boox-opensource-3067ba6/code/src/music_player/libcurl/curl/curlbuild.h
---- onyx-intl-boox-opensource-3067ba6.org/code/src/music_player/libcurl/curl/curlbuild.h	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/music_player/libcurl/curl/curlbuild.h	2011-05-15 12:29:22.803911860 +0200
+-ADD_EXECUTABLE(gomoku.oar main.cpp ${SRCS} ${IMAGES_RES})
+-TARGET_LINK_LIBRARIES(gomoku.oar
+-  onyxapp
++ADD_EXECUTABLE(gomoku main.cpp ${SRCS} ${IMAGES_RES})
++TARGET_LINK_LIBRARIES(gomoku
+   onyx_data
+   onyx_screen
+   onyx_ui
+diff -ruN onyx-intl-boox-opensource-de7830e.org/code/src/music_player/libcurl/curl/curlbuild.h onyx-intl-boox-opensource-de7830e/code/src/music_player/libcurl/curl/curlbuild.h
+--- onyx-intl-boox-opensource-de7830e.org/code/src/music_player/libcurl/curl/curlbuild.h	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/code/src/music_player/libcurl/curl/curlbuild.h	2012-02-11 14:27:59.169264273 +0100
 @@ -1,584 +1,192 @@
 -#ifndef __CURL_CURLBUILD_H
 -#define __CURL_CURLBUILD_H
@@ -1043,57 +954,18 @@ diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/music_player/libcurl/cu
 +#define CURL_SUFFIX_CURL_OFF_TU ULL
 +
 +#endif /* __CURL_CURLBUILD_H */
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/code/src/sudoku/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/code/src/sudoku/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/code/src/sudoku/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/code/src/sudoku/CMakeLists.txt	2011-05-15 12:33:28.033912996 +0200
-@@ -13,7 +13,6 @@
+diff -ruN onyx-intl-boox-opensource-de7830e.org/code/src/sudoku/CMakeLists.txt onyx-intl-boox-opensource-de7830e/code/src/sudoku/CMakeLists.txt
+--- onyx-intl-boox-opensource-de7830e.org/code/src/sudoku/CMakeLists.txt	2012-01-03 03:17:32.000000000 +0100
++++ onyx-intl-boox-opensource-de7830e/code/src/sudoku/CMakeLists.txt	2012-02-11 14:43:31.907287330 +0100
+@@ -11,9 +11,8 @@
+ SET(READER_RES_SRC icons/icon.qrc symmetry/symmetry.qrc)
+ QT4_ADD_RESOURCES(sudoku_RES ${READER_RES_SRC})
  
- ADD_EXECUTABLE(sudoku sudokuactions.cpp ${SRCS} ${sudoku_RES})
- TARGET_LINK_LIBRARIES(sudoku
+-ADD_EXECUTABLE(sudoku.oar sudokuactions.cpp ${SRCS} ${sudoku_RES})
+-TARGET_LINK_LIBRARIES(sudoku.oar
 -  onyxapp
++ADD_EXECUTABLE(sudoku sudokuactions.cpp ${SRCS} ${sudoku_RES})
++TARGET_LINK_LIBRARIES(sudoku
    onyx_data
    onyx_screen
    onyx_ui
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/third_party/gmock/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/third_party/gmock/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/third_party/gmock/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/third_party/gmock/CMakeLists.txt	2011-05-15 12:29:22.805911932 +0200
-@@ -1,7 +1,11 @@
- include_directories(. include)
- 
--add_library(gmock
--  src/gmock-all.cc)
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(gmock src/gmock-all.cc)
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(gmock SHARED src/gmock-all.cc)
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+
- set_target_properties(gmock
-   PROPERTIES
-   COMPILE_FLAGS "-DPATH_MAX=4096")
-diff -ruN onyx-intl-boox-opensource-3067ba6.org/third_party/gtest/CMakeLists.txt onyx-intl-boox-opensource-3067ba6/third_party/gtest/CMakeLists.txt
---- onyx-intl-boox-opensource-3067ba6.org/third_party/gtest/CMakeLists.txt	2011-04-16 08:33:07.000000000 +0200
-+++ onyx-intl-boox-opensource-3067ba6/third_party/gtest/CMakeLists.txt	2011-05-15 12:29:22.805911932 +0200
-@@ -1,10 +1,19 @@
- include_directories(.)
- 
--add_library(gtest
--  src/gtest-all.cc)
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(gtest src/gtest-all.cc)
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(gtest SHARED src/gtest-all.cc)
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+
- set_target_properties(gtest
-   PROPERTIES
-   COMPILE_FLAGS "-DPATH_MAX=4096")
- 
--add_library(gtest_main src/gtest_main.cc)
-+IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(gtest_main src/gtest_main.cc)
-+ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+	add_library(gtest_main SHARED src/gtest_main.cc)
-+ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
-+
- target_link_libraries(gtest_main gtest)

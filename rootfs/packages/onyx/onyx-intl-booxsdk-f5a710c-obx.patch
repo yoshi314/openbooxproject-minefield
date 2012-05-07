@@ -1,0 +1,370 @@
+diff -ruN onyx-intl-booxsdk-f5a710c.onx/code/include/onyx/ui/status_bar.h onyx-intl-booxsdk-f5a710c.obx/code/include/onyx/ui/status_bar.h
+--- onyx-intl-booxsdk-f5a710c.onx/code/include/onyx/ui/status_bar.h	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.obx/code/include/onyx/ui/status_bar.h	2012-04-07 13:42:08.000000000 +0200
+@@ -37,6 +37,7 @@
+     bool setProgress(const int value, const int total,
+             bool show_message = true, const QString &message = "");
+     bool setMessage(const QString & message);
++    bool setMessage(const QString & message, const QFont & font);
+     bool setItemState(const StatusBarItemType type, const int state);
+ 
+     void enableJumpToPage(bool enable) { enable_jump_to_page_ = enable; }
+@@ -77,7 +78,8 @@
+     void onAboutToSuspend();
+     void onWakeup();
+     void onAboutToShutdown();
+-    void onWifiDeviceChanged(bool enabled);
++    void onWpaConnectionChanged(WifiProfile profile, WpaConnection::ConnectionState state);
++    void onMusicPlayerStateChanged(int);
+     void onReport3GNetwork(const int signal, const int total, const int network);
+     void onPppConnectionChanged(const QString &message, int value);
+     void onStylusChanged(bool inserted);
+diff -ruN onyx-intl-booxsdk-f5a710c.onx/code/include/onyx/ui/ui_global.h onyx-intl-booxsdk-f5a710c.obx/code/include/onyx/ui/ui_global.h
+--- onyx-intl-booxsdk-f5a710c.onx/code/include/onyx/ui/ui_global.h	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.obx/code/include/onyx/ui/ui_global.h	2012-03-17 23:03:38.000000000 +0100
+@@ -173,6 +173,11 @@
+     EXIT_FULL_SCREEN,
+     BACKLIGHT_BRIGHTNESS,
+     SYSTEM_VOLUME,
++    REMOVE_SD,
++    STANDBY,
++    SHUTDOWN,
++    WIFI,
++    WIFI_OFF,
+ };
+ 
+ enum AnnotationMode
+diff -ruN onyx-intl-booxsdk-f5a710c.onx/code/src/sys/sys_conf.cpp onyx-intl-booxsdk-f5a710c.obx/code/src/sys/sys_conf.cpp
+--- onyx-intl-booxsdk-f5a710c.onx/code/src/sys/sys_conf.cpp	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.obx/code/src/sys/sys_conf.cpp	2012-03-30 07:51:26.000000000 +0200
+@@ -274,17 +274,17 @@
+ 
+ bool SystemConfig::isMusicPlayerAvailable()
+ {
+-    return system("which music_player") == 0;
++    return system("which music_player > /dev/null") == 0;
+ }
+ 
+ bool SystemConfig::isMediaPlayerAvailable()
+ {
+-    return system("which onyx_media_player") == 0;
++    return system("which onyx_media_player > /dev/null") == 0;
+ }
+ 
+ bool SystemConfig::isUpdateSplashEnabled()
+ {
+-    return system("which update_splash") == 0;
++    return system("which update_splash > /dev/null") == 0;
+ }
+ 
+ bool SystemConfig::hasHomePage()
+diff -ruN onyx-intl-booxsdk-f5a710c.onx/code/src/sys/sys_status.cpp onyx-intl-booxsdk-f5a710c.obx/code/src/sys/sys_status.cpp
+--- onyx-intl-booxsdk-f5a710c.onx/code/src/sys/sys_status.cpp	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.obx/code/src/sys/sys_status.cpp	2012-05-06 11:43:09.000000000 +0200
+@@ -510,7 +510,8 @@
+ 
+ bool SysStatus::isMusicPlayerRunning()
+ {
+-    return isProcessRunning("music_player");
++    return true;
++    //return isProcessRunning("music_player");
+ }
+ 
+ bool SysStatus::isProcessRunning(const QString & proc_name)
+@@ -1192,7 +1193,7 @@
+     QDBusMessage reply = connection_.call(message);
+     if (reply.type() == QDBusMessage::ReplyMessage)
+     {
+-        return checkAndReturnBool(reply.arguments());;
++        return checkAndReturnBool(reply.arguments());
+     }
+     else if (reply.type() == QDBusMessage::ErrorMessage)
+     {
+diff -ruN onyx-intl-booxsdk-f5a710c.onx/code/src/ui/onyx_ui_images.qrc onyx-intl-booxsdk-f5a710c.obx/code/src/ui/onyx_ui_images.qrc
+--- onyx-intl-booxsdk-f5a710c.onx/code/src/ui/onyx_ui_images.qrc	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.obx/code/src/ui/onyx_ui_images.qrc	2012-03-30 07:42:39.000000000 +0200
+@@ -243,5 +243,15 @@
+     <file>images/comic_mode.png</file>
+ 
+     <file>images/system_volume.png</file>
++
++    <file>images/remove_sd.png</file>
++    <file>images/shutdown.png</file>
++    <file>images/standby.png</file>
++    <file>images/wifi_off.png</file>
++    <file>images/power_0.png</file>
++    <file>images/power_1.png</file>
++    <file>images/power_2.png</file>
++    <file>images/power_3.png</file>
++    <file>images/power_4.png</file>
+   </qresource>
+ </RCC>
+diff -ruN onyx-intl-booxsdk-f5a710c.onx/code/src/ui/status_bar.cpp onyx-intl-booxsdk-f5a710c.obx/code/src/ui/status_bar.cpp
+--- onyx-intl-booxsdk-f5a710c.onx/code/src/ui/status_bar.cpp	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.obx/code/src/ui/status_bar.cpp	2012-04-17 17:49:59.000000000 +0200
+@@ -67,10 +67,14 @@
+             SIGNAL(aboutToShutdown()),
+             this,
+             SLOT(onAboutToShutdown()));
++    connect(&sys_status.connectionManager(),
++            SIGNAL(connectionChanged(WifiProfile, WpaConnection::ConnectionState)),
++            this,
++            SLOT(onWpaConnectionChanged(WifiProfile, WpaConnection::ConnectionState)));
+     connect(&sys_status,
+-            SIGNAL(sdioChangedSignal(bool)),
++            SIGNAL(musicPlayerStateChanged(int)),
+             this,
+-            SLOT(onWifiDeviceChanged(bool)));
++            SLOT(onMusicPlayerStateChanged(int)));
+     connect(&sys_status,
+             SIGNAL(stylusChanged(bool)),
+             this,
+@@ -119,8 +123,8 @@
+     // Adjust the order if necessary.
+     const StatusBarItemType all[] =
+     {
+-        MENU, PROGRESS, MESSAGE, STYLUS, CLOCK, INPUT_TEXT, VOLUME, SCREEN_REFRESH, INPUT_URL,THREEG_CONNECTION,
+-        CONNECTION, VIEWPORT, MUSIC_PLAYER, BATTERY
++        MENU, PROGRESS, MESSAGE, STYLUS, INPUT_TEXT, VOLUME, MUSIC_PLAYER, SCREEN_REFRESH, INPUT_URL,
++        THREEG_CONNECTION, CONNECTION, VIEWPORT, CLOCK, BATTERY
+     };
+     const int size = sizeof(all)/sizeof(all[0]);
+     for(int i = 0; i < size; ++i)
+@@ -161,6 +165,19 @@
+     return false;
+ }
+ 
++bool StatusBar::setMessage(const QString & message, const QFont & font)
++{
++    StatusBarItem *ptr = item(MESSAGE, false);
++    if (ptr)
++    {
++        StatusBarItemMessage *text= static_cast<StatusBarItemMessage*>(ptr);
++        text->setFont(font);
++        text->setMessage(message);
++        return true;
++    }
++    return false;
++}
++
+ void StatusBar::showItem(StatusBarItemType id, bool show)
+ {
+     StatusBarItem *ptr = item(id, false);
+@@ -187,12 +204,6 @@
+         wnd->setProgress(value, total, show_message, message);
+     }
+ 
+-    if (show_message && (ptr = item(MESSAGE, false)))
+-    {
+-        StatusBarItemMessage *wnd = static_cast<StatusBarItemMessage*>(ptr);
+-        wnd->setMessage(value, total);
+-    }
+-
+     ptr = item(CLOCK, false);
+     if (ptr)
+     {
+@@ -283,12 +294,6 @@
+ {
+     onyx::screen::instance().enableUpdate(false);
+     StatusBarItem *ptr = item(MESSAGE, false);
+-    if (ptr)
+-    {
+-        StatusBarItemMessage *wnd = static_cast<StatusBarItemMessage*>(ptr);
+-        wnd->setMessage(current, total);
+-        wnd->repaint();
+-    }
+ 
+     ptr = item(PROGRESS, false);
+     if (ptr)
+@@ -373,6 +378,7 @@
+ 
+ void StatusBar::onMusicPlayerClicked()
+ {
++    SysStatus::instance().requestMusicPlayer(START_PLAYER);
+ }
+ 
+ void StatusBar::onClockClicked()
+@@ -517,40 +523,74 @@
+ 
+ void StatusBar::onAboutToSuspend()
+ {
+-    qDebug("Status Bar handles about to suspend signal");
+ }
+ 
+ void StatusBar::onWakeup()
+ {
+-    qDebug("Status Bar handles wake up signal");
+ }
+ 
+ void StatusBar::onAboutToShutdown()
+ {
+-    qDebug("Status Bar handles about to shutdown signal");
+ }
+ 
+-void StatusBar::onWifiDeviceChanged(bool enabled)
++void StatusBar::onWpaConnectionChanged(WifiProfile profile, WpaConnection::ConnectionState state)
+ {
+-    qDebug("Status Bar handles wifi device changed signal");
++    qDebug("Status Bar handles wpa connection changed signal");
+     StatusBarItem *ptr = item(CONNECTION, false);
+-    if (ptr == 0)
++    if (ptr)
+     {
+-        return;
++        StatusBarItemConnection *wnd = static_cast<StatusBarItemConnection*>(ptr);
++        onyx::screen::instance().enableUpdate(false);
++        switch (state)
++        {
++        case WpaConnection::STATE_COMPLETE:
++            wnd->setConnectionStatus((profile.quality() + 13) / 25);
++            wnd->show();
++            break;
++        case WpaConnection::STATE_DISCONNECTED:
++        case WpaConnection::STATE_ACQUIRING_ADDRESS_ERROR:
++            wnd->hide();
++            break;
++        default:
++            break;
++        }
++        QApplication::processEvents();
++        repaint();
++        onyx::screen::instance().enableUpdate(true);
++        onyx::screen::instance().updateWidget(this, onyx::screen::ScreenProxy::GU, false);
+     }
++}
+ 
+-    if (enabled)
+-    {
+-        ptr->show();
+-    }
+-    else
++void StatusBar::onMusicPlayerStateChanged(int state)
++{
++    StatusBarItem *ptr = item(MUSIC_PLAYER, false);
++    if (ptr)
+     {
+-        ptr->hide();
++        StatusBarItemMusicPlayer *wnd = static_cast<StatusBarItemMusicPlayer*>(ptr);
++        onyx::screen::instance().enableUpdate(false);
++        switch (state)
++        {
++        case MUSIC_PLAYING:
++        case MUSIC_STOPPED:
++        case MUSIC_PAUSED:
++            wnd->setImage(state);
++            wnd->show();
++            break;
++        case STOP_PLAYER:
++            wnd->hide();
++            break;
++        default:
++            break;
++        }
++        QApplication::processEvents();
++        repaint();
++        onyx::screen::instance().enableUpdate(true);
++        onyx::screen::instance().updateWidget(this, onyx::screen::ScreenProxy::GU, false);
+     }
+ }
++
+ void StatusBar::onReport3GNetwork(const int signal, const int total, const int network)
+ {
+-
+     StatusBarItem *ptr = item(THREEG_CONNECTION, false);
+     if (ptr)
+     {
+@@ -751,6 +791,10 @@
+         item = new StatusBarItemMenu(this);
+         connect(item, SIGNAL(clicked()), this, SLOT(onMenuClicked()));
+         break;
++    case MESSAGE:
++        item = new StatusBarItemMessage(this);
++        connect(item, SIGNAL(clicked()), this, SLOT(onMessageAreaClicked()));
++        break;
+     case BATTERY:
+         item = new StatusBarItemBattery(this);
+         connect(item, SIGNAL(clicked()), this, SLOT(onBatteryClicked()));
+diff -ruN onyx-intl-booxsdk-f5a710c.onx/code/src/ui/status_bar_item_connection.cpp onyx-intl-booxsdk-f5a710c.obx/code/src/ui/status_bar_item_connection.cpp
+--- onyx-intl-booxsdk-f5a710c.onx/code/src/ui/status_bar_item_connection.cpp	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.obx/code/src/ui/status_bar_item_connection.cpp	2012-04-07 14:51:27.000000000 +0200
+@@ -25,7 +25,7 @@
+     : StatusBarItem(CONNECTION, parent)
+     , status_(-1)
+ {
+-    setConnectionStatus(0);
++    hide();
+ }
+ 
+ StatusBarItemConnection::~StatusBarItemConnection(void)
+diff -ruN onyx-intl-booxsdk-f5a710c.onx/code/src/ui/status_bar_item_music_player.cpp onyx-intl-booxsdk-f5a710c.obx/code/src/ui/status_bar_item_music_player.cpp
+--- onyx-intl-booxsdk-f5a710c.onx/code/src/ui/status_bar_item_music_player.cpp	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.obx/code/src/ui/status_bar_item_music_player.cpp	2012-05-06 11:42:33.000000000 +0200
+@@ -31,7 +31,7 @@
+ 
+ void StatusBarItemMusicPlayer::createLayout()
+ {
+-    connect(&sys::SysStatus::instance(), SIGNAL(musicPlayerStateChanged(int)), this, SLOT(setImage(int)));
++    //connect(&sys::SysStatus::instance(), SIGNAL(musicPlayerStateChanged(int)), this, SLOT(setImage(int)));
+ }
+ 
+ void StatusBarItemMusicPlayer::paintEvent(QPaintEvent *pe)
+diff -ruN onyx-intl-booxsdk-f5a710c.onx/code/src/ui/system_actions.cpp onyx-intl-booxsdk-f5a710c.obx/code/src/ui/system_actions.cpp
+--- onyx-intl-booxsdk-f5a710c.onx/code/src/ui/system_actions.cpp	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.obx/code/src/ui/system_actions.cpp	2012-03-17 23:02:22.000000000 +0100
+@@ -142,6 +142,56 @@
+                 actions_.push_back(br);
+                 break;
+             }
++        case REMOVE_SD:
++            {
++                shared_ptr<QAction> removeSd(new QAction(exclusiveGroup()));
++                removeSd->setCheckable(true);
++                removeSd->setText(QCoreApplication::tr("Safely Remove SD"));
++                removeSd->setIcon(QIcon(QPixmap(":/images/remove_sd.png")));
++                removeSd->setData(REMOVE_SD);
++                actions_.push_back(removeSd);
++                break;
++            }
++        case STANDBY:
++            {
++                shared_ptr<QAction> standby(new QAction(exclusiveGroup()));
++                standby->setCheckable(true);
++                standby->setText(QCoreApplication::tr("Standby"));
++                standby->setIcon(QIcon(QPixmap(":/images/standby.png")));
++                standby->setData(STANDBY);
++                actions_.push_back(standby);
++                break;
++            }
++        case SHUTDOWN:
++            {
++                shared_ptr<QAction> shutdown(new QAction(exclusiveGroup()));
++                shutdown->setCheckable(true);
++                shutdown->setText(QCoreApplication::tr("Shutdown"));
++                shutdown->setIcon(QIcon(QPixmap(":/images/shutdown.png")));
++                shutdown->setData(SHUTDOWN);
++                actions_.push_back(shutdown);
++                break;
++            }
++        case WIFI:
++            {
++                shared_ptr<QAction> wifi(new QAction(exclusiveGroup()));
++                wifi->setCheckable(true);
++                wifi->setText(QCoreApplication::tr("Connect to WLAN"));
++                wifi->setIcon(QIcon(QPixmap(":/images/wifi.png")));
++                wifi->setData(WIFI);
++                actions_.push_back(wifi);
++                break;
++            }
++        case WIFI_OFF:
++            {
++                shared_ptr<QAction> wifiOff(new QAction(exclusiveGroup()));
++                wifiOff->setCheckable(true);
++                wifiOff->setText(QCoreApplication::tr("Disconnect from WLAN"));
++                wifiOff->setIcon(QIcon(QPixmap(":/images/wifi_off.png")));
++                wifiOff->setData(WIFI_OFF);
++                actions_.push_back(wifiOff);
++                break;
++            }
+         }
+     }
+ }

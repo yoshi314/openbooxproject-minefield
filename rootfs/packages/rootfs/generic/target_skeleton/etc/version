@@ -1,2 +1,2 @@
-export VERSION="1.5.1 20110418"
-export GIT_COMMIT=f080695
+export VERSION="1.6 20111128"
+export GIT_COMMIT=

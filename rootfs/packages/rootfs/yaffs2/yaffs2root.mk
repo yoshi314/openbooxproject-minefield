@@ -68,7 +68,8 @@ $(PACKAGE_DIR)/.unpacked: packages/rootfs/yaffs2/packaging.tar.gz
 	touch $(PACKAGE_DIR)/.unpacked
 
 $(BOOX_UPDATE_TARGET): linux yaffs2root aescrypt $(PACKAGE_DIR)/.unpacked
-	echo $(shell cat $(TARGET_DIR)/etc/version | grep " VERSION" | awk -F"\"" '{print $$2}') > $(PACKAGE_DIR)/onyx_update/version
+	echo "1.5.1" > $(PACKAGE_DIR)/onyx_update/version
+	echo "onyx" > $(PACKAGE_DIR)/onyx_update/customer_id
 	@if [ "$(TARGET_ROOTFS_YAFFS2_BOOX_UPDATE_KERNEL)" == "y" ] ; then \
 		cp -dpf $(ZIMAGE_TARGET)/zImage $(PACKAGE_DIR)/onyx_update/images; \
 		cp -dpf packages/rootfs/yaffs2/zImage-initramfs $(PACKAGE_DIR)/onyx_update/images; \

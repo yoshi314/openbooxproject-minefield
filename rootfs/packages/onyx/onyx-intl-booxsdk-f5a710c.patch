@@ -1,6 +1,6 @@
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/CMakeLists.txt	2011-05-15 10:01:11.592912527 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/CMakeLists.txt	2012-02-06 21:24:06.298900773 +0100
 @@ -2,16 +2,13 @@
  CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
  
@@ -31,9 +31,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a
  INCLUDE(strict_warning)
  
  # Project include directories.
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/examples/cms/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/examples/cms/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/examples/cms/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/examples/cms/CMakeLists.txt	2011-05-15 11:09:50.146912509 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/examples/cms/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/examples/cms/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/examples/cms/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/examples/cms/CMakeLists.txt	2012-02-06 21:24:06.299900773 +0100
 @@ -1,5 +1,5 @@
  enable_qt()
  
@@ -41,9 +41,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/examples/cms/CMakeLists.txt onyx-in
 -target_link_libraries(query_file onyx_cms ${QT_LIBRARIES})
 +target_link_libraries(query_file onyx_cms onyx_data onyx_screen ${QT_LIBRARIES})
  set_target_properties(query_file PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/examples/dictionary/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/examples/dictionary/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/examples/dictionary/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/examples/dictionary/CMakeLists.txt	2011-05-15 10:01:11.592912527 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/examples/dictionary/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/examples/dictionary/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/examples/dictionary/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/examples/dictionary/CMakeLists.txt	2012-02-06 21:24:06.305900769 +0100
 @@ -12,7 +12,9 @@
  add_definitions(-DQT_SHARED)
  add_definitions(-DQT_NO_DEBUG)
@@ -55,9 +55,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/examples/dictionary/CMakeLists.txt 
 +SET_TARGET_PROPERTIES(my_dict_plugin_static PROPERTIES OUTPUT_NAME "my_dict_plugin")
  
 +target_link_libraries(my_dict_plugin ${QT_LIBRARIES} ${ADD_LIB})
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/examples/sys/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/examples/sys/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/examples/sys/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/examples/sys/CMakeLists.txt	2011-05-15 11:23:15.000000000 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/examples/sys/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/examples/sys/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/examples/sys/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/examples/sys/CMakeLists.txt	2012-02-06 21:24:06.306900770 +0100
 @@ -3,20 +3,20 @@
  add_executable(battery_test
    battery_test.cpp
@@ -111,9 +111,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/examples/sys/CMakeLists.txt onyx-in
 -target_link_libraries(change_gray_scale onyx_sys onyx_data ${QT_LIBRARIES} ${ADD_LIB})
 +target_link_libraries(change_gray_scale onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} ${ADD_LIB})
  set_target_properties(change_gray_scale PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/base/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/base/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/base/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/base/CMakeLists.txt	2011-05-15 10:01:11.598912703 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/base/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/base/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/base/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/base/CMakeLists.txt	2012-02-06 21:24:06.306900770 +0100
 @@ -5,10 +5,11 @@
    ${ONYXSDK_DIR}/include/onyx/base/tasks_handler.h
  )
@@ -130,9 +130,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/base/CMakeLists.txt onyx-intl-b
  target_link_libraries(onyx_base
    onyx_data # This is added for base_model. Perhaps base_model should be in onyx_data
  )
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/CMakeLists.txt	2011-05-15 10:01:11.599912725 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/CMakeLists.txt	2012-02-06 21:24:06.307900773 +0100
 @@ -1,7 +1,10 @@
  enable_qt()
  
@@ -145,22 +145,12 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/CMakeLists.txt onyx-intl-booxsd
  target_link_libraries(onyxapp onyx_sys onyx_screen ${QT_LIBRARIES})
  strict_warning(onyxapp)
  
-@@ -13,6 +16,6 @@
- add_subdirectory(sys)
- add_subdirectory(ui)
- add_subdirectory(wireless)
--add_subdirectory(sound)
--add_subdirectory(tts)
--add_subdirectory(dictionary)
-+add_subdirectory(sound)
-+add_subdirectory(tts)
-+add_subdirectory(dictionary)
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/cms/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/cms/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/cms/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/cms/CMakeLists.txt	2011-05-15 10:01:11.599912725 +0200
-@@ -14,5 +14,9 @@
-   user_db.cpp
-   download_db.cpp)
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/cms/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/cms/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/cms/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/cms/CMakeLists.txt	2012-02-07 19:22:42.541883819 +0100
+@@ -16,7 +16,11 @@
+   media_db.cpp
+   media_info_manager.cpp)
  
 -add_library(onyx_cms ${SRCS})
 +add_library(onyx_cms_static STATIC ${SRCS})
@@ -168,12 +158,14 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/cms/CMakeLists.txt onyx-intl-bo
 +
 +SET_TARGET_PROPERTIES(onyx_cms_static PROPERTIES OUTPUT_NAME "onyx_cms")
 +
- strict_warning(onyx_cms)
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/data/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/data/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/data/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/data/CMakeLists.txt	2011-05-15 10:01:11.599912725 +0200
-@@ -23,7 +23,7 @@
-   ${ONYXSDK_DIR}/include/onyx/data/data.h
+ TARGET_LINK_LIBRARIES(onyx_cms
+     ${QT_LIBRARIES}
+     ${ADD_LIB})
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/data/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/data/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/data/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/data/CMakeLists.txt	2012-02-07 19:26:35.395878017 +0100
+@@ -24,7 +24,7 @@
+   ${ONYXSDK_DIR}/include/onyx/data/user_behavior.h
  )
  
 -add_library(onyx_data
@@ -181,8 +173,8 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/data/CMakeLists.txt onyx-intl-b
    configuration.cpp
    bookmark.cpp
    reading_history.cpp
-@@ -49,5 +49,11 @@
-   search_context.cpp
+@@ -51,5 +51,11 @@
+   user_behavior.cpp
    ${MOC_SRCS}
  )
 +
@@ -191,11 +183,11 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/data/CMakeLists.txt onyx-intl-b
 +
 +SET_TARGET_PROPERTIES(onyx_data_static PROPERTIES OUTPUT_NAME "onyx_data")
 +
- target_link_libraries(onyx_data onyx_cms onyx_sys)
+ target_link_libraries(onyx_data onyx_cms onyx_sys onyx_touch)
  strict_warning(onyx_data)
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/dictionary/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/dictionary/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/dictionary/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/dictionary/CMakeLists.txt	2011-05-15 10:08:52.591912846 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/dictionary/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/dictionary/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/dictionary/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/dictionary/CMakeLists.txt	2012-02-07 19:31:12.431871116 +0100
 @@ -30,8 +30,11 @@
  SET(resource_srcs dictionary_images.qrc)
  QT4_ADD_RESOURCES(dictionary_ui_res ${resource_srcs})
@@ -206,12 +198,12 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/dictionary/CMakeLists.txt onyx-
 +SET_TARGET_PROPERTIES(dictionary_static PROPERTIES OUTPUT_NAME "dictionary")
  
 -ADD_LIBRARY(dictionary ${SRCS} ${MOC_SRCS} ${dictionary_ui_res})
- TARGET_LINK_LIBRARIES(dictionary onyx_ui)
+ TARGET_LINK_LIBRARIES(dictionary onyx_ui ${ADD_LIB})
  
  ########### Unit Tests #####################
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/screen/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/screen/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/screen/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/screen/CMakeLists.txt	2011-05-15 10:16:00.352910971 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/screen/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/screen/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/screen/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/screen/CMakeLists.txt	2012-02-06 21:24:06.310900773 +0100
 @@ -1,3 +1,7 @@
  QT4_WRAP_CPP(MOC_SRCS ${ONYXSDK_DIR}/include/onyx/screen/screen_update_watcher.h)
 -add_library(onyx_screen STATIC screen_proxy.cpp screen_update_watcher.cpp ${MOC_SRCS})
@@ -221,11 +213,11 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/screen/CMakeLists.txt onyx-intl
 +SET_TARGET_PROPERTIES(onyx_screen_static PROPERTIES OUTPUT_NAME "onyx_screen")
 +
  install(TARGETS onyx_screen DESTINATION lib)
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sound/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/sound/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/sound/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/sound/CMakeLists.txt	2011-05-15 11:50:36.000000000 +0200
-@@ -10,13 +10,16 @@
- SET(srcs ${srcs} ${hrds} ${MOC_SRCS})
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/sound/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/sound/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/sound/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/sound/CMakeLists.txt	2012-02-07 20:42:20.076764840 +0100
+@@ -32,7 +32,11 @@
+ ENDIF (BUILD_WITH_TFT)
  
  # Sound library.
 -ADD_LIBRARY(sound ${srcs})
@@ -233,8 +225,11 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sound/CMakeLists.txt onyx-intl-
 +ADD_LIBRARY(sound SHARED ${srcs})
 +
 +SET_TARGET_PROPERTIES(sound_static PROPERTIES OUTPUT_NAME "sound")
- 
- # Unittest
++
+ TARGET_LINK_LIBRARIES(sound
+    ${ALSALIB}
+    ${QT_LIBRARIES}
+@@ -42,7 +46,7 @@
  add_definitions(-DSAMPLE_ROOT="${CMAKE_SOURCE_DIR}/unittest/data")
  FILE(GLOB WAV_UNITTEST_SRCS unittest/wave_unittest.cpp)
  ADD_EXECUTABLE(wav_unittest ${WAV_UNITTEST_SRCS})
@@ -243,7 +238,7 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sound/CMakeLists.txt onyx-intl-
     gtest_main
     ${QT_LIBRARIES}
     ${ADD_LIB}
-@@ -29,7 +32,7 @@
+@@ -55,7 +59,7 @@
  FILE(GLOB ASYNC_PLAYER_UNITTEST_SRCS unittest/async_player_unittest.cpp)
  
  ADD_EXECUTABLE(async_player_unittest ${ASYNC_PLAYER_UNITTEST_SRCS})
@@ -252,7 +247,7 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sound/CMakeLists.txt onyx-intl-
     gtest_main
     ${QT_LIBRARIES}
     ${ADD_LIB}
-@@ -43,7 +46,7 @@
+@@ -69,7 +73,7 @@
  FILE(GLOB SOUND_UNITTEST_SRCS unittest/sound_unittest.cpp)
  
  ADD_EXECUTABLE(sound_unittest ${SOUND_UNITTEST_SRCS})
@@ -261,9 +256,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sound/CMakeLists.txt onyx-intl-
     gtest_main
     ${QT_LIBRARIES}
     ${ADD_LIB}
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sys/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/sys/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/sys/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/sys/CMakeLists.txt	2011-05-15 10:49:58.700914826 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/sys/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/sys/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/sys/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/sys/CMakeLists.txt	2012-02-06 21:24:06.311900773 +0100
 @@ -13,9 +13,13 @@
  FILE(GLOB SRCS *.cpp)
  SET(SRCS ${HDRS} ${SRCS} ${MOC_SRCS})
@@ -280,34 +275,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sys/CMakeLists.txt onyx-intl-bo
  
  
  INSTALL(TARGETS onyx_sys DESTINATION lib)
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/sys/sys_status.cpp onyx-intl-booxsdk-a0c3c9a/code/src/sys/sys_status.cpp
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/sys/sys_status.cpp	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/sys/sys_status.cpp	2011-05-26 19:58:50.695317001 +0200
-@@ -701,14 +701,19 @@
-     {
-         QString qws_args=getenv("QWS_DISPLAY");
-         QString data;
--        if (qws_args.isEmpty()) {
-+        if (qws_args.isEmpty())
-+        {
-             data = QString("export QWS_DISPLAY=Transformed:Rot%1:OnyxScreen:/dev/mem");
-             #ifdef BUILD_FOR_FB
-             data = QString("export QWS_DISPLAY=Transformed:Rot%1:LinuxFb:/dev/fb0:depth=all"); 
-             #endif
-             data = data.arg(degree);
--        } else {//replace Rotxx to Rot&degree
-+        }
-+        else
-+        {
-+            //replace Rotxx to Rot&degree
-             data = qws_args.replace(QRegExp(":Rot\\d+"),QString(":Rot%1").arg(degree));
-+            data.prepend("export QWS_DISPLAY=");
-         }
-         file.write(data.toAscii());
-         file.flush();
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/tts/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/tts/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/tts/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/tts/CMakeLists.txt	2011-05-15 10:01:11.602912822 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/tts/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/tts/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/tts/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/tts/CMakeLists.txt	2012-02-06 21:24:06.314900771 +0100
 @@ -61,7 +61,10 @@
  SET(resource_srcs tts_images.qrc)
  QT4_ADD_RESOURCES(tts_ui_res ${resource_srcs})
@@ -320,9 +290,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/tts/CMakeLists.txt onyx-intl-bo
  
  TARGET_LINK_LIBRARIES(tts sound  onyx_ui
     ${QT_LIBRARIES}
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/ui/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/ui/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/ui/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/ui/CMakeLists.txt	2011-05-15 10:01:11.602912822 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/ui/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/ui/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/ui/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/ui/CMakeLists.txt	2012-02-06 21:24:06.315900772 +0100
 @@ -16,11 +16,10 @@
      vbf_icons.qrc)
  QT4_ADD_RESOURCES(VBF_ICONS_RCCS_SRCS ${VBF_ICONS_RCCS})
@@ -339,9 +309,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/ui/CMakeLists.txt onyx-intl-boo
  
  if (NOT WIN32)
  strict_warning(onyx_ui)
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/wireless/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/wireless/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/wireless/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/wireless/CMakeLists.txt	2011-05-15 10:01:11.603912846 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/wireless/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/wireless/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/wireless/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/wireless/CMakeLists.txt	2012-02-06 21:24:06.315900772 +0100
 @@ -15,7 +15,12 @@
  QT4_ADD_RESOURCES(WIFI_RES ${resource_srcs})
  
@@ -356,9 +326,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/wireless/CMakeLists.txt onyx-in
  strict_warning(onyx_wireless)
  INSTALL(TARGETS onyx_wireless DESTINATION lib)
  
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/wpa/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/src/wpa/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/src/wpa/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/src/wpa/CMakeLists.txt	2011-05-15 10:01:11.603912846 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/src/wpa/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/src/wpa/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/src/wpa/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/src/wpa/CMakeLists.txt	2012-02-06 21:24:06.315900772 +0100
 @@ -6,6 +6,9 @@
      SET(SRC wpa_ctrl.c os_unix.c)
  ENDIF (WIN32)
@@ -371,9 +341,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/src/wpa/CMakeLists.txt onyx-intl-bo
 +SET_TARGET_PROPERTIES(onyx_wpa_static PROPERTIES OUTPUT_NAME "onyx_wpa")
  
 +strict_warning(onyx_wpa)
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/tests/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/tests/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/tests/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/tests/CMakeLists.txt	2011-05-15 10:01:11.604912868 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/tests/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/tests/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/tests/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/tests/CMakeLists.txt	2012-02-06 21:24:06.315900772 +0100
 @@ -30,11 +30,11 @@
    WILL_FAIL TRUE)
  
@@ -388,9 +358,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/tests/CMakeLists.txt onyx-intl-boox
  MAYBE_LINK_TCMALLOC(bookmark_unittest)
  SET_TARGET_PROPERTIES(bookmark_unittest PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
  ADD_TEST(BookmarkUnittest ${TEST_OUTPUT_PATH}/bookmark_unittest)
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/tests/cms/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/tests/cms/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/tests/cms/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/tests/cms/CMakeLists.txt	2011-05-15 12:08:35.000000000 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/tests/cms/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/tests/cms/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/tests/cms/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/tests/cms/CMakeLists.txt	2012-02-06 21:24:06.316900772 +0100
 @@ -1,7 +1,7 @@
  enable_qt()
  
@@ -401,9 +371,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/tests/cms/CMakeLists.txt onyx-intl-
  onyx_test(thumbnail_unittest thumbnail_unittest.cpp)
 -target_link_libraries(thumbnail_unittest onyx_cms onyx_sys ${QT_LIBRARIES} gtest)
 +target_link_libraries(thumbnail_unittest onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES} gtest)
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/tests/sys/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/code/tests/sys/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/code/tests/sys/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/code/tests/sys/CMakeLists.txt	2011-05-15 12:00:23.000000000 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/code/tests/sys/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/code/tests/sys/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/code/tests/sys/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/code/tests/sys/CMakeLists.txt	2012-02-06 21:24:06.316900772 +0100
 @@ -1,17 +1,17 @@
  enable_qt()
  
@@ -428,9 +398,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/code/tests/sys/CMakeLists.txt onyx-intl-
 \ No newline at end of file
 +TARGET_LINK_LIBRARIES(unzip_test onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES})
 \ No newline at end of file
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/third_party/gmock/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/third_party/gmock/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/third_party/gmock/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/third_party/gmock/CMakeLists.txt	2011-05-15 10:01:11.604912868 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/third_party/gmock/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/third_party/gmock/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/third_party/gmock/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/third_party/gmock/CMakeLists.txt	2012-02-06 21:24:06.316900772 +0100
 @@ -1,7 +1,10 @@
  include_directories(. include)
  
@@ -444,9 +414,9 @@ diff -ruN onyx-intl-booxsdk-a0c3c9a.org/third_party/gmock/CMakeLists.txt onyx-in
  set_target_properties(gmock
    PROPERTIES
    COMPILE_FLAGS "-DPATH_MAX=4096")
-diff -ruN onyx-intl-booxsdk-a0c3c9a.org/third_party/gtest/CMakeLists.txt onyx-intl-booxsdk-a0c3c9a/third_party/gtest/CMakeLists.txt
---- onyx-intl-booxsdk-a0c3c9a.org/third_party/gtest/CMakeLists.txt	2011-04-18 06:54:03.000000000 +0200
-+++ onyx-intl-booxsdk-a0c3c9a/third_party/gtest/CMakeLists.txt	2011-05-15 10:01:11.605912887 +0200
+diff -ruN onyx-intl-booxsdk-f5a710c.org/third_party/gtest/CMakeLists.txt onyx-intl-booxsdk-f5a710c.onx/third_party/gtest/CMakeLists.txt
+--- onyx-intl-booxsdk-f5a710c.org/third_party/gtest/CMakeLists.txt	2012-02-02 02:13:46.000000000 +0100
++++ onyx-intl-booxsdk-f5a710c.onx/third_party/gtest/CMakeLists.txt	2012-02-06 21:24:06.316900772 +0100
 @@ -1,10 +1,17 @@
  include_directories(.)
  

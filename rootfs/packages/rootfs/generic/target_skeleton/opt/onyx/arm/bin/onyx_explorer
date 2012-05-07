@@ -1,7 +1,0 @@
-#!/bin/sh
-
-echo "export EXPLORER=/opt/onyx/arm/bin/explorer" > /tmp/explorer
-echo "export OPTION=" >> /tmp/explorer
-
-/etc/rc.d/init.d/mpd stop
-killall system_manager
