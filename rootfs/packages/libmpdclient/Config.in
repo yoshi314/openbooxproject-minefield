@@ -1,0 +1,6 @@
+config PACKAGE_LIBMPDCLIENT
+	bool "MPD Client Library"
+	default y
+	help
+	  A asynchronous API library for interfacing MPD
+	  in the C, C++ & Objective C languages.

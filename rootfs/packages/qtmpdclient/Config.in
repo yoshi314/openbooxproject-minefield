@@ -1,0 +1,5 @@
+config PACKAGE_QTMPDCLIENT
+	bool "QtMpdClient"
+	default y
+	help
+	 QtMpdClient is a Qt wrapper library for libmpdclient

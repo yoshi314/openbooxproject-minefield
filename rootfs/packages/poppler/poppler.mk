@@ -33,9 +33,19 @@ $(POPPLER_DIR)/.configured: $(POPPLER_DIR)/.unpacked
 		--localstatedir=/var \
 		--datarootdir=/usr/share \
 		--enable-fixedpoint \
+		--disable-libopenjpeg \
+		--disable-libjpeg \
 		--disable-libpng \
 		--disable-splash-output \
+		--disable-cairo-output \
+		--disable-poppler-glib \
+		--disable-introspection \
+		--disable-gtk-doc-html \
+		--disable-gdk \
+		--disable-poppler-qt \
 		--disable-poppler-cpp \
+		--disable-gtk-test \
+		--disable-abiword-output \
 		--disable-utils \
 		--disable-cms \
 	);

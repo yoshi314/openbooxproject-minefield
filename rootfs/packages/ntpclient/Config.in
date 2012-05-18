@@ -1,0 +1,5 @@
+config PACKAGE_NTPCLIENT
+	bool "Network Time Protocol (NTP) client"
+	default y
+	help
+	  ntpclient is an NTP (RFC-1305) client for unix-alike computers.
