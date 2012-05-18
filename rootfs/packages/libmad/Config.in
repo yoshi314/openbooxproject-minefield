@@ -1,6 +1,6 @@
 config PACKAGE_LIBMAD
         bool "MPEG Audio Decoder library "
-        default n
+        default y
         help
           the library supports MPEG-1 and the MPEG-2 extension to lower sampling frequencies,
           as well as the de facto MPEG 2.5 format. All three audio layers -- Layer I, Layer II,

@@ -1,6 +1,6 @@
 config PACKAGE_FLAC
 	bool "FLAC Audio Encoder/Decoder"
-	default n
+	default y
 	help
 	  FLAC stands for Free Lossless Audio Codec, an audio format similar
 	  to MP3, but lossless, meaning that audio is compressed in FLAC without
