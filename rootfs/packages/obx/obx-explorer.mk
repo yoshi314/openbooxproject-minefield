@@ -8,7 +8,8 @@
 OBX_EXPLORER_DIR:=$(BUILD_DIR)/obx_explorer
 
 $(OBX_EXPLORER_DIR)/.git:
-	(cd $(BUILD_DIR);git clone git://openbooxproject.git.sourceforge.net/gitroot/openbooxproject/obx_explorer)
+#	(cd $(BUILD_DIR);git clone git://openbooxproject.git.sourceforge.net/gitroot/openbooxproject/obx_explorer)
+	(cd $(BUILD_DIR);git clone file:///home/yoshi/src/onyx/obx_explorer -b test01)
 
 obx_explorer-update: $(OBX_EXPLORER_DIR)/.git
 	@if [ "`(cd $(OBX_EXPLORER_DIR);git tag -l '$(OBX_VERSION)')`" == "$(OBX_VERSION)" ] ; then \
