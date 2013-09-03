@@ -9,14 +9,14 @@ OBX_EXPLORER_DIR:=$(BUILD_DIR)/obx_explorer
 
 $(OBX_EXPLORER_DIR)/.git:
 #	(cd $(BUILD_DIR);git clone git://openbooxproject.git.sourceforge.net/gitroot/openbooxproject/obx_explorer)
-	(cd $(BUILD_DIR);git clone file:///home/yoshi/src/onyx/obx_explorer -b test01)
+	(cd $(BUILD_DIR);git clone https://github.com/yoshi314/boox-explorer.git -b test01)
 
 obx_explorer-update: $(OBX_EXPLORER_DIR)/.git
-	@if [ "`(cd $(OBX_EXPLORER_DIR);git tag -l '$(OBX_VERSION)')`" == "$(OBX_VERSION)" ] ; then \
-		(cd $(OBX_EXPLORER_DIR);git checkout tags/$(OBX_VERSION)); \
-	else \
-		(cd $(OBX_EXPLORER_DIR);git checkout master;git pull); \
-	fi;
+#	@if [ "`(cd $(OBX_EXPLORER_DIR);git tag -l '$(OBX_VERSION)')`" == "$(OBX_VERSION)" ] ; then \
+#		(cd $(OBX_EXPLORER_DIR);git checkout tags/$(OBX_VERSION)); \
+#	else \
+		(cd $(OBX_EXPLORER_DIR);git checkout test01;git pull); \
+#	fi;
 
 $(OBX_EXPLORER_DIR)/.configured: obx_explorer-update
 	(cd $(OBX_EXPLORER_DIR); \
