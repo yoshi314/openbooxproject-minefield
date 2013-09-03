@@ -1,6 +1,6 @@
 QT_SOURCE= qt-embedded-linux-opensource-src-4.5.2.tar.gz
 QT_DIR= $(BUILD_DIR)/qt-embedded-linux-opensource-src-4.5.2
-QT_DOWNLOAD_SITE= "http://get.qt.nokia.com/qt/source"
+QT_DOWNLOAD_SITE= "http://ftp.heanet.ie/disk1/ftp.trolltech.com/pub/qt/source/"
 
 $(DL_DIR)/$(QT_SOURCE):
 	$(WGET) -P $(DL_DIR) $(QT_DOWNLOAD_SITE)/$(QT_SOURCE)

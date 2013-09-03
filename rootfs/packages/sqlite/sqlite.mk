@@ -1,12 +1,13 @@
-SQLITE_SOURCE=sqlite-amalgamation-3_6_21.zip
-SQLITE_DIR=$(BUILD_DIR)/sqlite-amalgamation-3_6_21
+SQLITE_SOURCE=sqlite-amalgamation-3080001.zip
+SQLITE_DIR=$(BUILD_DIR)/sqlite-amalgamation-3080001
 
 $(DL_DIR)/$(SQLITE_SOURCE):
-	$(WGET) -P $(DL_DIR) $(DOWNLOAD_SITE)/$(SQLITE_SOURCE)
+#	$(WGET) -P $(DL_DIR) $(DOWNLOAD_SITE)/$(SQLITE_SOURCE)
+	$(WGET) -P $(DL_DIR) http://www.sqlite.org/2013/sqlite-amalgamation-3080001.zip
 
 $(SQLITE_DIR)/.unpacked:$(DL_DIR)/$(SQLITE_SOURCE)
 	mkdir -p $(SQLITE_DIR)
-	unzip -d $(SQLITE_DIR) $(DL_DIR)/$(SQLITE_SOURCE)
+	unzip -d $(BUILD_DIR) $(DL_DIR)/$(SQLITE_SOURCE)
 	touch $(SQLITE_DIR)/.unpacked
 
 $(SQLITE_DIR)/libsqlite3.so.0.8.6:$(SQLITE_DIR)/.unpacked
