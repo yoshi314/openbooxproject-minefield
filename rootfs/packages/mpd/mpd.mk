@@ -19,7 +19,7 @@ $(MPD_DIR)/.configured: $(MPD_DIR)/.unpacked
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
 		LDFLAGS="$(TARGET_LDFLAGS) -lz" \
-		PKG_CONFIG_PATH=$(EPREFIX)/lib/pkgconfig \
+		PKG_CONFIG_LIBDIR=$(EPREFIX)/lib/pkgconfig \
 		SQLITE_CFLAGS=-I$(EPREFIX)/include \
 		SQLITE_LIBS="-L$(EPREFIX)/lib -lsqlite3" \
 		MAD_CFLAGS=-I$(EPREFIX)/include \
@@ -38,6 +38,7 @@ $(MPD_DIR)/.configured: $(MPD_DIR)/.unpacked
 		--enable-sqlite \
 		--enable-alsa \
 		--disable-oss \
+		--disable-ffmpeg \
 	);
 	touch $(MPD_DIR)/.configured
 
