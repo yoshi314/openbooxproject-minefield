@@ -5,10 +5,11 @@
 #############################################################
 .PHONY: qtmpdclient-update
 
-QTMPDCLIENT_DIR:=$(BUILD_DIR)/QtMpdClient
+QTMPDCLIENT_DIR:=$(BUILD_DIR)/boox-qtmpd
 
 $(QTMPDCLIENT_DIR)/.git:
-	(cd $(BUILD_DIR);git clone git://openbooxproject.git.sourceforge.net/gitroot/openbooxproject/QtMpdClient)
+#	(cd $(BUILD_DIR);git clone git://openbooxproject.git.sourceforge.net/gitroot/openbooxproject/QtMpdClient)
+	(cd $(BUILD_DIR);git clone https://github.com/yoshi314/boox-qtmpd.git)
 
 qtmpdclient-update: $(QTMPDCLIENT_DIR)/.git
 	@if [ "`(cd $(QTMPDCLIENT_DIR);git tag -l '$(OBX_VERSION)')`" == "$(OBX_VERSION)" ] ; then \
