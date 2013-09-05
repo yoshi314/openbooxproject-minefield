@@ -5,7 +5,7 @@
 #############################################################
 .PHONY: obx_explorer-update
 
-OBX_EXPLORER_DIR:=$(BUILD_DIR)/obx_explorer
+OBX_EXPLORER_DIR:=$(BUILD_DIR)/boox-explorer
 
 $(OBX_EXPLORER_DIR)/.git:
 #	(cd $(BUILD_DIR);git clone git://openbooxproject.git.sourceforge.net/gitroot/openbooxproject/obx_explorer)

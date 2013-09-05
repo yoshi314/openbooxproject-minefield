@@ -72,4 +72,12 @@ source "packages/fontconfig/Config.in"
 source "packages/libiconv/Config.in"
 source "packages/glib/Config.in"
 endif
+menuconfig ADDONS
+	bool "Include extra data into image"
+	default n
+	help
+	    This section allows integration of additional data files into the image.
+if ADDONS
+source "packages/fonts/Config.in"
+endif
 endmenu

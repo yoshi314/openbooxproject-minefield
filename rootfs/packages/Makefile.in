@@ -24,6 +24,7 @@ IMAGE_DIR:=$(BASE_DIR)/images
 BUILD_DIR:=$(BASE_DIR)/build
 KERNEL_DIR:=$(BASE_DIR)/kernel
 TARGET_DIR:=$(BUILD_DIR)/root
+EXTRAS_DIR:=$(BASE_DIR)/extras
 
 ELF_TOOLCHAIN_DIR:=/usr/local/arm/3.2.1-elf
 TOOLCHAIN_DIR:=$(strip $(subst ",, $(TOOLCHAIN_DIR)))
