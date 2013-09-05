@@ -6,3 +6,4 @@ kernel/
 dl
 .config*
 *~
+extras/fonts/*
