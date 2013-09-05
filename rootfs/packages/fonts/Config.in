@@ -1,0 +1,6 @@
+config PACKAGE_FONTS
+	bool "extra_fonts"
+	default y
+	help
+	 Install additional fonts into the image
+	 Place your fonts in dl/fonts/ directory
