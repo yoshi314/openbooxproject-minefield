@@ -1,0 +1,850 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0cbb272..797ad0f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,16 +2,13 @@
+ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+ 
+ # Additional cmake modules
+-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
+-
+-# Naboo project.
+-Project(SDK CXX C)
+-ENABLE_TESTING()
++SET(CMAKE_MODULE_PATH "${ONYX_SDK_ROOT}/cmake_modules")
+ 
+ # Check to use arm toolchain or not
+ IF(BUILD_FOR_ARM)
+     INCLUDE(arm_toolchain)
+     USE_ARM_TOOLCHAIN()
++    link_directories("/opt/onyx/arm/lib")
+ ENDIF(BUILD_FOR_ARM)
+ 
+ IF(UNIX OR BUILD_FOR_ARM)
+@@ -29,6 +26,10 @@ ELSE (WIN32)
+ ADD_DEFINITIONS(-DCONFIG_CTRL_IFACE_UNIX)
+ ENDIF (WIN32)
+ 
++# Naboo project.
++Project(SDK CXX C)
++ENABLE_TESTING()
++
+ INCLUDE(strict_warning)
+ 
+ # Project include directories.
+diff --git a/code/examples/cms/CMakeLists.txt b/code/examples/cms/CMakeLists.txt
+index 686a0b2..5c0dda2 100644
+--- a/code/examples/cms/CMakeLists.txt
++++ b/code/examples/cms/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ enable_qt()
+ 
+ add_executable(query_file query_file.cpp)
+-target_link_libraries(query_file onyx_cms ${QT_LIBRARIES})
++target_link_libraries(query_file onyx_cms onyx_data onyx_screen ${QT_LIBRARIES})
+ set_target_properties(query_file PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+diff --git a/code/examples/dictionary/CMakeLists.txt b/code/examples/dictionary/CMakeLists.txt
+index 166c591..8d9081f 100644
+--- a/code/examples/dictionary/CMakeLists.txt
++++ b/code/examples/dictionary/CMakeLists.txt
+@@ -12,7 +12,9 @@ add_definitions(-DQT_PLUGIN)
+ add_definitions(-DQT_SHARED)
+ add_definitions(-DQT_NO_DEBUG)
+ 
++add_library(my_dict_plugin_static STATIC ${DICT_SRCS})
+ add_library(my_dict_plugin SHARED ${DICT_SRCS})
+-target_link_libraries(my_dict_plugin ${QT_LIBRARIES} ${ADD_LIB})
+ 
++SET_TARGET_PROPERTIES(my_dict_plugin_static PROPERTIES OUTPUT_NAME "my_dict_plugin")
+ 
++target_link_libraries(my_dict_plugin ${QT_LIBRARIES} ${ADD_LIB})
+diff --git a/code/examples/sys/CMakeLists.txt b/code/examples/sys/CMakeLists.txt
+index f5195b4..a4ab77a 100644
+--- a/code/examples/sys/CMakeLists.txt
++++ b/code/examples/sys/CMakeLists.txt
+@@ -3,20 +3,20 @@ enable_qt()
+ add_executable(battery_test
+   battery_test.cpp
+ )
+-target_link_libraries(battery_test onyx_sys onyx_data ${QT_LIBRARIES} m rt pthread dl)
++target_link_libraries(battery_test onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} m rt pthread dl)
+ set_target_properties(battery_test PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+ add_executable(dump_wifi_profile
+   dump_wifi_profile.cpp
+ )
+-target_link_libraries(dump_wifi_profile onyx_sys onyx_data ${QT_LIBRARIES} m rt pthread dl)
++target_link_libraries(dump_wifi_profile onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} m rt pthread dl)
+ set_target_properties(dump_wifi_profile PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+ add_executable(wpa_proxy
+   wpa_proxy.cpp
+   ${UNITTEST_WPA_MOC_SRCS}
+ )
+-target_link_libraries(wpa_proxy onyx_sys onyx_data ${QT_LIBRARIES} m rt pthread dl)
++target_link_libraries(wpa_proxy onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} m rt pthread dl)
+ set_target_properties(wpa_proxy PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+ qt4_wrap_cpp(MOC_SYS_STATUS_DUMP_SRCS sys_status_dump.h)
+@@ -24,7 +24,7 @@ add_executable(sys_status_dump
+   sys_status_dump.h
+   sys_status_dump.cpp
+   ${MOC_SYS_STATUS_DUMP_SRCS})
+-target_link_libraries(sys_status_dump onyx_sys onyx_data ${QT_LIBRARIES} m rt pthread dl)
++target_link_libraries(sys_status_dump onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} m rt pthread dl)
+ set_target_properties(sys_status_dump
+   PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+@@ -34,16 +34,16 @@ set_target_properties(sys_status_dump
+ add_executable(snapshot
+   snapshot.cpp
+ )
+-target_link_libraries(snapshot onyx_sys onyx_data ${QT_LIBRARIES} ${ADD_LIB})
++target_link_libraries(snapshot onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} ${ADD_LIB})
+ 
+ add_executable(dump_device_info
+   dump_device_info.cpp
+ )
+-target_link_libraries(dump_device_info onyx_sys onyx_data ${QT_LIBRARIES} ${ADD_LIB})
++target_link_libraries(dump_device_info onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} ${ADD_LIB})
+ set_target_properties(dump_device_info PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+ add_executable(change_gray_scale
+   change_gray_scale.cpp
+ )
+-target_link_libraries(change_gray_scale onyx_sys onyx_data ${QT_LIBRARIES} ${ADD_LIB})
++target_link_libraries(change_gray_scale onyx_sys onyx_data onyx_screen ${QT_LIBRARIES} ${ADD_LIB})
+ set_target_properties(change_gray_scale PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+diff --git a/code/include/onyx/ui/status_bar.h b/code/include/onyx/ui/status_bar.h
+index 7b342e3..8d11456 100644
+--- a/code/include/onyx/ui/status_bar.h
++++ b/code/include/onyx/ui/status_bar.h
+@@ -40,6 +40,7 @@ public Q_SLOTS:
+     bool setProgress(const int value, const int total,
+             bool show_message = true, const QString &message = "");
+     bool setMessage(const QString & message);
++    bool setMessage(const QString & message, const QFont & font);
+     bool setItemState(const StatusBarItemType type, const int state);
+ 
+     void enableJumpToPage(bool enable) { enable_jump_to_page_ = enable; }
+@@ -89,7 +90,8 @@ private Q_SLOTS:
+     void onAboutToSuspend();
+     void onWakeup();
+     void onAboutToShutdown();
+-    void onWifiDeviceChanged(bool enabled);
++    void onWpaConnectionChanged(WifiProfile profile, WpaConnection::ConnectionState state);
++    void onMusicPlayerStateChanged(int);
+     void onReport3GNetwork(const int signal, const int total, const int network);
+     void onPppConnectionChanged(const QString &message, int value);
+     void onStylusChanged(bool inserted);
+diff --git a/code/include/onyx/ui/ui_global.h b/code/include/onyx/ui/ui_global.h
+index 45ad62d..3c9dfee 100644
+--- a/code/include/onyx/ui/ui_global.h
++++ b/code/include/onyx/ui/ui_global.h
+@@ -191,6 +191,11 @@ enum SystemAction
+     EXIT_FULL_SCREEN,
+     BACKLIGHT_BRIGHTNESS,
+     SYSTEM_VOLUME,
++    REMOVE_SD,
++    STANDBY,
++    SHUTDOWN,
++    WIFI,
++    WIFI_OFF,
+     GLOW_LIGHT_CONTROL
+ };
+ 
+diff --git a/code/src/CMakeLists.txt b/code/src/CMakeLists.txt
+index 2254dac..b2d7469 100644
+--- a/code/src/CMakeLists.txt
++++ b/code/src/CMakeLists.txt
+@@ -1,7 +1,10 @@
+ enable_qt()
+ 
++add_library(onyxapp_static STATIC application.cpp onyx_main.cpp)
++add_library(onyxapp SHARED application.cpp onyx_main.cpp)
++
++SET_TARGET_PROPERTIES(onyxapp_static PROPERTIES OUTPUT_NAME "onyxapp")
+ 
+-add_library(onyxapp application.cpp onyx_main.cpp)
+ target_link_libraries(onyxapp onyx_sys onyx_screen ${QT_LIBRARIES})
+ strict_warning(onyxapp)
+ 
+diff --git a/code/src/base/CMakeLists.txt b/code/src/base/CMakeLists.txt
+index 6ada8f0..fb954ee 100644
+--- a/code/src/base/CMakeLists.txt
++++ b/code/src/base/CMakeLists.txt
+@@ -5,10 +5,11 @@ qt4_wrap_cpp(MOC_SRCS
+   ${ONYXSDK_DIR}/include/onyx/base/tasks_handler.h
+ )
+ 
+-add_library(onyx_base ${MOC_SRCS}
+-  base_model.cpp
+-  tasks_handler.cpp
+-)
++add_library(onyx_base_static STATIC ${MOC_SRCS} base_model.cpp tasks_handler.cpp)
++add_library(onyx_base SHARED ${MOC_SRCS} base_model.cpp tasks_handler.cpp)
++
++SET_TARGET_PROPERTIES(onyx_base_static PROPERTIES OUTPUT_NAME "onyx_base")
++
+ target_link_libraries(onyx_base
+   onyx_data # This is added for base_model. Perhaps base_model should be in onyx_data
+ )
+diff --git a/code/src/cms/CMakeLists.txt b/code/src/cms/CMakeLists.txt
+index 36f61de..44e8d11 100644
+--- a/code/src/cms/CMakeLists.txt
++++ b/code/src/cms/CMakeLists.txt
+@@ -16,7 +16,11 @@ set(SRCS
+   media_db.cpp
+   media_info_manager.cpp)
+ 
+-add_library(onyx_cms ${SRCS})
++add_library(onyx_cms_static STATIC ${SRCS})
++add_library(onyx_cms SHARED ${SRCS})
++
++SET_TARGET_PROPERTIES(onyx_cms_static PROPERTIES OUTPUT_NAME "onyx_cms")
++
+ TARGET_LINK_LIBRARIES(onyx_cms
+     ${QT_LIBRARIES}
+     ${ADD_LIB})
+diff --git a/code/src/data/CMakeLists.txt b/code/src/data/CMakeLists.txt
+index 5f5c8b6..37fdca8 100644
+--- a/code/src/data/CMakeLists.txt
++++ b/code/src/data/CMakeLists.txt
+@@ -24,7 +24,7 @@ qt4_wrap_cpp(MOC_SRCS
+   ${ONYXSDK_DIR}/include/onyx/data/user_behavior.h
+ )
+ 
+-add_library(onyx_data
++SET(SRCS
+   configuration.cpp
+   bookmark.cpp
+   reading_history.cpp
+@@ -51,5 +51,11 @@ add_library(onyx_data
+   user_behavior.cpp
+   ${MOC_SRCS}
+ )
++
++add_library(onyx_data_static STATIC ${SRCS})
++add_library(onyx_data SHARED ${SRCS})
++
++SET_TARGET_PROPERTIES(onyx_data_static PROPERTIES OUTPUT_NAME "onyx_data")
++
+ target_link_libraries(onyx_data onyx_cms onyx_sys onyx_touch)
+ strict_warning(onyx_data)
+diff --git a/code/src/dictionary/CMakeLists.txt b/code/src/dictionary/CMakeLists.txt
+index 326c928..6907b6e 100644
+--- a/code/src/dictionary/CMakeLists.txt
++++ b/code/src/dictionary/CMakeLists.txt
+@@ -30,8 +30,12 @@ QT4_WRAP_CPP(MOC_SRCS ${MOC_HDRS})
+ SET(resource_srcs dictionary_images.qrc)
+ QT4_ADD_RESOURCES(dictionary_ui_res ${resource_srcs})
+ 
++ADD_LIBRARY(dictionary_static STATIC ${SRCS} ${MOC_SRCS} ${dictionary_ui_res})
++ADD_LIBRARY(dictionary SHARED ${SRCS} ${MOC_SRCS} ${dictionary_ui_res})
++
++SET_TARGET_PROPERTIES(dictionary_static PROPERTIES OUTPUT_NAME "dictionary")
++
+ 
+-ADD_LIBRARY(dictionary ${SRCS} ${MOC_SRCS} ${dictionary_ui_res})
+ TARGET_LINK_LIBRARIES(dictionary onyx_ui ${ADD_LIB} z)
+ 
+ ########### Unit Tests #####################
+diff --git a/code/src/screen/CMakeLists.txt b/code/src/screen/CMakeLists.txt
+index 0acf003..8d70a33 100644
+--- a/code/src/screen/CMakeLists.txt
++++ b/code/src/screen/CMakeLists.txt
+@@ -1,3 +1,7 @@
+ QT4_WRAP_CPP(MOC_SRCS ${ONYXSDK_DIR}/include/onyx/screen/screen_update_watcher.h)
+-add_library(onyx_screen STATIC screen_proxy.cpp screen_update_watcher.cpp ${MOC_SRCS})
++
++add_library(onyx_screen_static STATIC screen_proxy.cpp screen_update_watcher.cpp ${MOC_SRCS})
++add_library(onyx_screen SHARED screen_proxy.cpp screen_update_watcher.cpp ${MOC_SRCS})
++SET_TARGET_PROPERTIES(onyx_screen_static PROPERTIES OUTPUT_NAME "onyx_screen")
++
+ install(TARGETS onyx_screen DESTINATION lib)
+diff --git a/code/src/sound/CMakeLists.txt b/code/src/sound/CMakeLists.txt
+index a804c28..4f3abf3 100644
+--- a/code/src/sound/CMakeLists.txt
++++ b/code/src/sound/CMakeLists.txt
+@@ -32,7 +32,11 @@ ELSE (BUILD_WITH_TFT)
+ ENDIF (BUILD_WITH_TFT)
+ 
+ # Sound library.
+-ADD_LIBRARY(sound ${srcs})
++ADD_LIBRARY(sound_static STATIC ${srcs})
++ADD_LIBRARY(sound SHARED ${srcs})
++
++SET_TARGET_PROPERTIES(sound_static PROPERTIES OUTPUT_NAME "sound")
++
+ TARGET_LINK_LIBRARIES(sound
+    ${ALSALIB}
+    ${QT_LIBRARIES}
+@@ -42,7 +46,7 @@ TARGET_LINK_LIBRARIES(sound
+ add_definitions(-DSAMPLE_ROOT="${CMAKE_SOURCE_DIR}/unittest/data")
+ FILE(GLOB WAV_UNITTEST_SRCS unittest/wave_unittest.cpp)
+ ADD_EXECUTABLE(wav_unittest ${WAV_UNITTEST_SRCS})
+-TARGET_LINK_LIBRARIES(wav_unittest sound onyx_sys
++TARGET_LINK_LIBRARIES(wav_unittest sound onyx_sys onyx_data onyx_screen
+    gtest_main
+    ${QT_LIBRARIES}
+    ${ADD_LIB}
+@@ -55,7 +59,7 @@ ADD_TEST(WavUnittest ${TEST_OUTPUT_PATH}/wav_unittest)
+ FILE(GLOB ASYNC_PLAYER_UNITTEST_SRCS unittest/async_player_unittest.cpp)
+ 
+ ADD_EXECUTABLE(async_player_unittest ${ASYNC_PLAYER_UNITTEST_SRCS})
+-TARGET_LINK_LIBRARIES(async_player_unittest sound onyx_sys
++TARGET_LINK_LIBRARIES(async_player_unittest sound onyx_sys onyx_data onyx_screen
+    gtest_main
+    ${QT_LIBRARIES}
+    ${ADD_LIB}
+@@ -69,7 +73,7 @@ ADD_TEST(AsyncPlayerUnittest ${TEST_OUTPUT_PATH}/async_player_unittest)
+ FILE(GLOB SOUND_UNITTEST_SRCS unittest/sound_unittest.cpp)
+ 
+ ADD_EXECUTABLE(sound_unittest ${SOUND_UNITTEST_SRCS})
+-TARGET_LINK_LIBRARIES(sound_unittest sound onyx_sys
++TARGET_LINK_LIBRARIES(sound_unittest sound onyx_sys onyx_data onyx_screen
+    gtest_main
+    ${QT_LIBRARIES}
+    ${ADD_LIB}
+diff --git a/code/src/sys/CMakeLists.txt b/code/src/sys/CMakeLists.txt
+index be0b971..cc48307 100644
+--- a/code/src/sys/CMakeLists.txt
++++ b/code/src/sys/CMakeLists.txt
+@@ -13,9 +13,13 @@ QT4_WRAP_CPP(MOC_SRCS ${HDRS})
+ FILE(GLOB SRCS *.cpp)
+ SET(SRCS ${HDRS} ${SRCS} ${MOC_SRCS})
+ 
+-ADD_LIBRARY(onyx_sys ${SRCS})
++ADD_LIBRARY(onyx_sys_static STATIC ${SRCS})
++ADD_LIBRARY(onyx_sys SHARED ${SRCS})
++
++SET_TARGET_PROPERTIES(onyx_sys_static PROPERTIES OUTPUT_NAME "onyx_sys")
++
+ strict_warning(onyx_sys)
+-TARGET_LINK_LIBRARIES(onyx_sys onyx_wpa onyx_data)
++TARGET_LINK_LIBRARIES(onyx_sys onyx_wpa)
+ 
+ 
+ INSTALL(TARGETS onyx_sys DESTINATION lib)
+diff --git a/code/src/sys/sys_conf.cpp b/code/src/sys/sys_conf.cpp
+index ddba64a..db7ad30 100644
+--- a/code/src/sys/sys_conf.cpp
++++ b/code/src/sys/sys_conf.cpp
+@@ -286,17 +286,17 @@ void SystemConfig::setDate(int year, int month, int day,
+ 
+ bool SystemConfig::isMusicPlayerAvailable()
+ {
+-    return system("which music_player") == 0;
++    return system("which music_player > /dev/null") == 0;
+ }
+ 
+ bool SystemConfig::isMediaPlayerAvailable()
+ {
+-    return system("which onyx_media_player") == 0;
++    return system("which onyx_media_player > /dev/null") == 0;
+ }
+ 
+ bool SystemConfig::isUpdateSplashEnabled()
+ {
+-    return system("which update_splash") == 0;
++    return system("which update_splash > /dev/null") == 0;
+ }
+ 
+ bool SystemConfig::hasHomePage()
+diff --git a/code/src/sys/sys_status.cpp b/code/src/sys/sys_status.cpp
+index 5ea6c9d..638dd37 100644
+--- a/code/src/sys/sys_status.cpp
++++ b/code/src/sys/sys_status.cpp
+@@ -563,7 +563,8 @@ bool SysStatus::isFlashMountedDynamic()
+ 
+ bool SysStatus::isMusicPlayerRunning()
+ {
+-    return isProcessRunning("music_player");
++    return true;
++    //return isProcessRunning("music_player");
+ }
+ 
+ bool SysStatus::isProcessRunning(const QString & proc_name)
+@@ -1245,7 +1246,7 @@ bool SysStatus::stopWpaSupplicant()
+     QDBusMessage reply = connection_.call(message);
+     if (reply.type() == QDBusMessage::ReplyMessage)
+     {
+-        return checkAndReturnBool(reply.arguments());;
++        return checkAndReturnBool(reply.arguments());
+     }
+     else if (reply.type() == QDBusMessage::ErrorMessage)
+     {
+diff --git a/code/src/tts/CMakeLists.txt b/code/src/tts/CMakeLists.txt
+index 4224ab8..d90fe1c 100644
+--- a/code/src/tts/CMakeLists.txt
++++ b/code/src/tts/CMakeLists.txt
+@@ -61,7 +61,10 @@ QT4_WRAP_CPP(MOC_SRCS ${MOC_HDRS})
+ SET(resource_srcs tts_images.qrc)
+ QT4_ADD_RESOURCES(tts_ui_res ${resource_srcs})
+ 
+-ADD_LIBRARY(tts ${SRCS} ${MOC_SRCS} ${tts_ui_res})
++ADD_LIBRARY(tts_static STATIC ${SRCS} ${MOC_SRCS} ${tts_ui_res})
++ADD_LIBRARY(tts SHARED ${SRCS} ${MOC_SRCS} ${tts_ui_res})
++
++SET_TARGET_PROPERTIES(tts_static PROPERTIES OUTPUT_NAME "tts")
+ 
+ TARGET_LINK_LIBRARIES(tts sound  onyx_ui
+    ${QT_LIBRARIES}
+diff --git a/code/src/ui/CMakeLists.txt b/code/src/ui/CMakeLists.txt
+index 1924ecd..1eb4372 100644
+--- a/code/src/ui/CMakeLists.txt
++++ b/code/src/ui/CMakeLists.txt
+@@ -16,11 +16,10 @@ SET(VBF_ICONS_RCCS
+     vbf_icons.qrc)
+ QT4_ADD_RESOURCES(VBF_ICONS_RCCS_SRCS ${VBF_ICONS_RCCS})
+ 
+-IF (WIN32 OR ONYX_BUILD_STATIC_LIB)
+-    ADD_LIBRARY(onyx_ui ${SRCS} ${IMAGES_RES}  ${VBF_ICONS_RCCS_SRCS})
+-ELSE (WIN32 OR ONYX_BUILD_STATIC_LIB)
+-    ADD_LIBRARY(onyx_ui SHARED ${SRCS} ${IMAGES_RES}  ${VBF_ICONS_RCCS_SRCS})
+-ENDIF (WIN32 OR ONYX_BUILD_STATIC_LIB)
++ADD_LIBRARY(onyx_ui_static STATIC ${SRCS} ${IMAGES_RES}  ${VBF_ICONS_RCCS_SRCS})
++ADD_LIBRARY(onyx_ui SHARED ${SRCS} ${IMAGES_RES}  ${VBF_ICONS_RCCS_SRCS})
++
++SET_TARGET_PROPERTIES(onyx_ui_static PROPERTIES OUTPUT_NAME "onyx_ui")
+ 
+ if (NOT WIN32)
+ strict_warning(onyx_ui)
+diff --git a/code/src/ui/onyx_ui_images.qrc b/code/src/ui/onyx_ui_images.qrc
+index cb4d17a..0a5c27f 100644
+--- a/code/src/ui/onyx_ui_images.qrc
++++ b/code/src/ui/onyx_ui_images.qrc
+@@ -246,6 +246,16 @@
+     <file>images/reading_options.png</file>
+ 
+     <file>images/system_volume.png</file>
++    <file>images/remove_sd.png</file>
++    <file>images/shutdown.png</file>
++    <file>images/standby.png</file>
++    <file>images/wifi_off.png</file>
++    <file>images/power_0.png</file>
++    <file>images/power_1.png</file>
++    <file>images/power_2.png</file>
++    <file>images/power_3.png</file>
++    <file>images/power_4.png</file>
++
+     <file>images/history.png</file>
+     <file>images/mobile_mode.png</file>
+     <file>images/glow_light_switch.png</file>
+diff --git a/code/src/ui/status_bar.cpp b/code/src/ui/status_bar.cpp
+index 891fce9..cc3c527 100644
+--- a/code/src/ui/status_bar.cpp
++++ b/code/src/ui/status_bar.cpp
+@@ -68,10 +68,14 @@ void StatusBar::setupConnections()
+             SIGNAL(aboutToShutdown()),
+             this,
+             SLOT(onAboutToShutdown()));
++    connect(&sys_status.connectionManager(),
++            SIGNAL(connectionChanged(WifiProfile, WpaConnection::ConnectionState)),
++            this,
++            SLOT(onWpaConnectionChanged(WifiProfile, WpaConnection::ConnectionState)));
+     connect(&sys_status,
+-            SIGNAL(sdioChangedSignal(bool)),
++            SIGNAL(musicPlayerStateChanged(int)),
+             this,
+-            SLOT(onWifiDeviceChanged(bool)));
++            SLOT(onMusicPlayerStateChanged(int)));
+     connect(&sys_status,
+             SIGNAL(stylusChanged(bool)),
+             this,
+@@ -120,8 +124,8 @@ void StatusBar::addItems(StatusBarItemTypes items)
+     // Adjust the order if necessary.
+     const StatusBarItemType all[] =
+     {
+-        MENU, SCREEN_REFRESH, PROGRESS, MESSAGE, STYLUS, INPUT_TEXT, VOLUME, INPUT_URL,THREEG_CONNECTION,
+-        CONNECTION, VIEWPORT, MUSIC_PLAYER, APP_DEFINED, APP_CONFIG, CLOCK, BATTERY
++        MENU, PROGRESS, MESSAGE, STYLUS, INPUT_TEXT, VOLUME, MUSIC_PLAYER, SCREEN_REFRESH, INPUT_URL,
++        THREEG_CONNECTION, CONNECTION, VIEWPORT, APP_DEFINED, APP_CONFIG, CLOCK, BATTERY
+     };
+     const int size = sizeof(all)/sizeof(all[0]);
+     for(int i = 0; i < size; ++i)
+@@ -162,6 +166,19 @@ bool StatusBar::setMessage(const QString & message)
+     return false;
+ }
+ 
++bool StatusBar::setMessage(const QString & message, const QFont & font)
++{
++    StatusBarItem *ptr = item(MESSAGE, false);
++    if (ptr)
++    {
++        StatusBarItemMessage *text= static_cast<StatusBarItemMessage*>(ptr);
++        text->setFont(font);
++        text->setMessage(message);
++        return true;
++    }
++    return false;
++}
++
+ void StatusBar::showItem(StatusBarItemType id, bool show)
+ {
+     StatusBarItem *ptr = item(id, false);
+@@ -188,12 +205,6 @@ bool StatusBar::setProgress(const int value,
+         wnd->setProgress(value, total, show_message, message);
+     }
+ 
+-    if (show_message && (ptr = item(MESSAGE, false)))
+-    {
+-        StatusBarItemMessage *wnd = static_cast<StatusBarItemMessage*>(ptr);
+-        wnd->setMessage(value, total);
+-    }
+-
+     ptr = item(CLOCK, false);
+     if (ptr)
+     {
+@@ -284,12 +295,6 @@ void StatusBar::onProgressChanging(const int current,
+ {
+     onyx::screen::instance().enableUpdate(false);
+     StatusBarItem *ptr = item(MESSAGE, false);
+-    if (ptr)
+-    {
+-        StatusBarItemMessage *wnd = static_cast<StatusBarItemMessage*>(ptr);
+-        wnd->setMessage(current, total);
+-        wnd->repaint();
+-    }
+ 
+     ptr = item(PROGRESS, false);
+     if (ptr)
+@@ -518,6 +523,7 @@ void StatusBar::onVolumeButtonsPressed()
+ 
+ void StatusBar::onHideVolumeDialog()
+ {
++    SysStatus::instance().requestMusicPlayer(START_PLAYER);
+ }
+ 
+ void StatusBar::onConfigKeyboard()
+@@ -622,17 +628,14 @@ void StatusBar::onLowBatterySignal()
+ 
+ void StatusBar::onAboutToSuspend()
+ {
+-    qDebug("Status Bar handles about to suspend signal");
+ }
+ 
+ void StatusBar::onWakeup()
+ {
+-    qDebug("Status Bar handles wake up signal");
+ }
+ 
+ void StatusBar::onAboutToShutdown()
+ {
+-    qDebug("Status Bar handles about to shutdown signal");
+     if (legacy_pm_dialog_.get())
+     {
+         legacyPMDialog(false)->reject();
+@@ -647,24 +650,62 @@ void StatusBar::onAboutToShutdown()
+     }
+ }
+ 
+-void StatusBar::onWifiDeviceChanged(bool enabled)
++void StatusBar::onWpaConnectionChanged(WifiProfile profile, WpaConnection::ConnectionState state)
+ {
+     qDebug("Status Bar handles wifi device changed signal");
+     StatusBarItem *ptr = item(CONNECTION, false);
+-    if (ptr == 0)
+-    {
+-        return;
+-    }
+-
+-    if (enabled)
+-    {
+-        ptr->show();
+-    }
+-    else
++    if (ptr)
+     {
+-        ptr->hide();
++        StatusBarItemConnection *wnd = static_cast<StatusBarItemConnection*>(ptr);
++        onyx::screen::instance().enableUpdate(false);
++        switch (state)
++        {
++        case WpaConnection::STATE_COMPLETE:
++            wnd->setConnectionStatus((profile.quality() + 13) / 25);
++            wnd->show();
++            break;
++        case WpaConnection::STATE_DISCONNECTED:
++        case WpaConnection::STATE_ACQUIRING_ADDRESS_ERROR:
++            wnd->hide();
++            break;
++        default:
++            break;
++        }
++        QApplication::processEvents();
++        repaint();
++        onyx::screen::instance().enableUpdate(true);
++        onyx::screen::instance().updateWidget(this, onyx::screen::ScreenProxy::GU, false);
+     }
+ }
++void StatusBar::onMusicPlayerStateChanged(int state)
++{
++    StatusBarItem *ptr = item(MUSIC_PLAYER, false);
++    if (ptr)
++     {
++        StatusBarItemMusicPlayer *wnd = static_cast<StatusBarItemMusicPlayer*>(ptr);
++        onyx::screen::instance().enableUpdate(false);
++        switch (state)
++        {
++        case MUSIC_PLAYING:
++        case MUSIC_STOPPED:
++        case MUSIC_PAUSED:
++            wnd->setImage(state);
++            wnd->show();
++            break;
++        case STOP_PLAYER:
++            wnd->hide();
++            break;
++        default:
++            break;
++        }
++        QApplication::processEvents();
++        repaint();
++        onyx::screen::instance().enableUpdate(true);
++        onyx::screen::instance().updateWidget(this, onyx::screen::ScreenProxy::GU, false);
++     }
++ }
++
++
+ void StatusBar::onReport3GNetwork(const int signal, const int total, const int network)
+ {
+ 
+@@ -899,6 +940,10 @@ StatusBarItem *StatusBar::item(const StatusBarItemType type, bool create)
+         item = new StatusBarItemMenu(this);
+         connect(item, SIGNAL(clicked()), this, SLOT(onMenuClicked()));
+         break;
++    case MESSAGE:
++        item = new StatusBarItemMessage(this);
++        connect(item, SIGNAL(clicked()), this, SLOT(onMessageAreaClicked()));
++        break;
+     case BATTERY:
+         item = new StatusBarItemBattery(this);
+         connect(item, SIGNAL(clicked()), this, SLOT(onBatteryClicked()));
+diff --git a/code/src/ui/status_bar_item_connection.cpp b/code/src/ui/status_bar_item_connection.cpp
+index e33b185..17b0434 100644
+--- a/code/src/ui/status_bar_item_connection.cpp
++++ b/code/src/ui/status_bar_item_connection.cpp
+@@ -25,7 +25,7 @@ StatusBarItemConnection::StatusBarItemConnection(QWidget *parent)
+     : StatusBarItem(CONNECTION, parent)
+     , status_(-1)
+ {
+-    setConnectionStatus(0);
++    hide();
+ }
+ 
+ StatusBarItemConnection::~StatusBarItemConnection(void)
+diff --git a/code/src/ui/status_bar_item_music_player.cpp b/code/src/ui/status_bar_item_music_player.cpp
+index 1037fc1..a2b83d5 100644
+--- a/code/src/ui/status_bar_item_music_player.cpp
++++ b/code/src/ui/status_bar_item_music_player.cpp
+@@ -31,7 +31,7 @@ StatusBarItemMusicPlayer::~StatusBarItemMusicPlayer(void)
+ 
+ void StatusBarItemMusicPlayer::createLayout()
+ {
+-    connect(&sys::SysStatus::instance(), SIGNAL(musicPlayerStateChanged(int)), this, SLOT(setImage(int)));
++    //connect(&sys::SysStatus::instance(), SIGNAL(musicPlayerStateChanged(int)), this, SLOT(setImage(int)));
+ }
+ 
+ void StatusBarItemMusicPlayer::paintEvent(QPaintEvent *pe)
+diff --git a/code/src/ui/system_actions.cpp b/code/src/ui/system_actions.cpp
+index 444fe86..1fceed9 100644
+--- a/code/src/ui/system_actions.cpp
++++ b/code/src/ui/system_actions.cpp
+@@ -172,6 +172,56 @@ void SystemActions::generateActions(const std::vector<int> & actions)
+                 actions_.push_back(glow_light);
+                 break;
+             }
++        case REMOVE_SD:
++            {
++                shared_ptr<QAction> removeSd(new QAction(exclusiveGroup()));
++                removeSd->setCheckable(true);
++                removeSd->setText(QCoreApplication::tr("Safely Remove SD"));
++                removeSd->setIcon(QIcon(QPixmap(":/images/remove_sd.png")));
++                removeSd->setData(REMOVE_SD);
++                actions_.push_back(removeSd);
++                break;
++            }
++        case STANDBY:
++            {
++                shared_ptr<QAction> standby(new QAction(exclusiveGroup()));
++                standby->setCheckable(true);
++                standby->setText(QCoreApplication::tr("Standby"));
++                standby->setIcon(QIcon(QPixmap(":/images/standby.png")));
++                standby->setData(STANDBY);
++                actions_.push_back(standby);
++                break;
++            }
++        case SHUTDOWN:
++            {
++                shared_ptr<QAction> shutdown(new QAction(exclusiveGroup()));
++                shutdown->setCheckable(true);
++                shutdown->setText(QCoreApplication::tr("Shutdown"));
++                shutdown->setIcon(QIcon(QPixmap(":/images/shutdown.png")));
++                shutdown->setData(SHUTDOWN);
++                actions_.push_back(shutdown);
++                break;
++            }
++        case WIFI:
++            {
++                shared_ptr<QAction> wifi(new QAction(exclusiveGroup()));
++                wifi->setCheckable(true);
++                wifi->setText(QCoreApplication::tr("Connect to WLAN"));
++                wifi->setIcon(QIcon(QPixmap(":/images/wifi.png")));
++                wifi->setData(WIFI);
++                actions_.push_back(wifi);
++                break;
++            }
++        case WIFI_OFF:
++            {
++                shared_ptr<QAction> wifiOff(new QAction(exclusiveGroup()));
++                wifiOff->setCheckable(true);
++                wifiOff->setText(QCoreApplication::tr("Disconnect from WLAN"));
++                wifiOff->setIcon(QIcon(QPixmap(":/images/wifi_off.png")));
++                wifiOff->setData(WIFI_OFF);
++                actions_.push_back(wifiOff);
++                break;
++            }
+         }
+     }
+ }
+diff --git a/code/src/wireless/CMakeLists.txt b/code/src/wireless/CMakeLists.txt
+index 514b215..318f57b 100644
+--- a/code/src/wireless/CMakeLists.txt
++++ b/code/src/wireless/CMakeLists.txt
+@@ -16,7 +16,12 @@ SET(resource_srcs wifi_images.qrc)
+ QT4_ADD_RESOURCES(WIFI_RES ${resource_srcs})
+ 
+ QT4_WRAP_CPP(MOC_SRCS ${HDRS})
+-ADD_LIBRARY(onyx_wireless ${SRCS} ${MOC_SRCS} ${WIFI_RES})
++
++ADD_LIBRARY(onyx_wireless_static STATIC ${SRCS} ${MOC_SRCS} ${WIFI_RES})
++ADD_LIBRARY(onyx_wireless SHARED ${SRCS} ${MOC_SRCS} ${WIFI_RES})
++
++SET_TARGET_PROPERTIES(onyx_wireless_static PROPERTIES OUTPUT_NAME "onyx_wireless")
++
+ strict_warning(onyx_wireless)
+ INSTALL(TARGETS onyx_wireless DESTINATION lib)
+ 
+diff --git a/code/src/wpa/CMakeLists.txt b/code/src/wpa/CMakeLists.txt
+index 9a4fbe7..8a72bea 100644
+--- a/code/src/wpa/CMakeLists.txt
++++ b/code/src/wpa/CMakeLists.txt
+@@ -6,6 +6,9 @@ ELSE (WIN32)
+     SET(SRC wpa_ctrl.c os_unix.c)
+ ENDIF (WIN32)
+ 
+-ADD_LIBRARY(onyx_wpa ${SRC})
+-strict_warning(onyx_wpa)
++ADD_LIBRARY(onyx_wpa_static STATIC ${SRC})
++ADD_LIBRARY(onyx_wpa SHARED ${SRC})
++
++SET_TARGET_PROPERTIES(onyx_wpa_static PROPERTIES OUTPUT_NAME "onyx_wpa")
+ 
++strict_warning(onyx_wpa)
+diff --git a/code/tests/CMakeLists.txt b/code/tests/CMakeLists.txt
+index 80caffe..c2d3aef 100644
+--- a/code/tests/CMakeLists.txt
++++ b/code/tests/CMakeLists.txt
+@@ -30,11 +30,11 @@ SET_TESTS_PROPERTIES(
+   WILL_FAIL TRUE)
+ 
+ onyx_test(conf_unittest conf_unittest.cpp configuration.cpp)
+-TARGET_LINK_LIBRARIES(conf_unittest onyx_cms onyx_data ${QT_LIBRARIES})
++TARGET_LINK_LIBRARIES(conf_unittest onyx_cms onyx_data onyx_screen ${QT_LIBRARIES})
+ ADD_TEST(BookmarkUnittest ${TEST_OUTPUT_PATH}/conf_unittest)
+ 
+ ADD_EXECUTABLE(bookmark_unittest bookmark_unittest.cpp)
+-TARGET_LINK_LIBRARIES(bookmark_unittest onyx_cms gtest_main onyx_data ${QT_LIBRARIES})
++TARGET_LINK_LIBRARIES(bookmark_unittest onyx_cms gtest_main onyx_data onyx_screen ${QT_LIBRARIES})
+ MAYBE_LINK_TCMALLOC(bookmark_unittest)
+ SET_TARGET_PROPERTIES(bookmark_unittest PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ ADD_TEST(BookmarkUnittest ${TEST_OUTPUT_PATH}/bookmark_unittest)
+diff --git a/code/tests/cms/CMakeLists.txt b/code/tests/cms/CMakeLists.txt
+index 12a9eb7..74eb5e5 100644
+--- a/code/tests/cms/CMakeLists.txt
++++ b/code/tests/cms/CMakeLists.txt
+@@ -1,10 +1,10 @@
+ enable_qt()
+ 
+ onyx_test(content_manager_unittest content_manager_unittest.cpp)
+-target_link_libraries(content_manager_unittest onyx_data onyx_cms onyx_data onyx_sys ${QT_LIBRARIES} gtest)
++target_link_libraries(content_manager_unittest onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES} gtest)
+ 
+ onyx_test(thumbnail_unittest thumbnail_unittest.cpp)
+-target_link_libraries(thumbnail_unittest onyx_cms onyx_sys ${QT_LIBRARIES} gtest)
++target_link_libraries(thumbnail_unittest onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES} gtest)
+ 
+ onyx_test(download_db_unittest download_db_unittest.cpp)
+-target_link_libraries(download_db_unittest onyx_data onyx_cms onyx_data onyx_sys ${QT_LIBRARIES} gtest)
++target_link_libraries(download_db_unittest onyx_data onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES} gtest)
+diff --git a/code/tests/sys/CMakeLists.txt b/code/tests/sys/CMakeLists.txt
+index c0ed95e..eb25db1 100644
+--- a/code/tests/sys/CMakeLists.txt
++++ b/code/tests/sys/CMakeLists.txt
+@@ -1,17 +1,17 @@
+ enable_qt()
+ 
+ onyx_test(sys_conf_test sys_conf_test.cpp)
+-target_link_libraries(sys_conf_test  onyx_sys onyx_data gtest  ${QT_LIBRARIES}  ${ADD_LIB})
++target_link_libraries(sys_conf_test  onyx_sys onyx_data onyx_screen gtest  ${QT_LIBRARIES}  ${ADD_LIB})
+ 
+ 
+ 
+ ADD_EXECUTABLE(wifi_manager_unittest wifi_manager_test.cpp)
+-TARGET_LINK_LIBRARIES(wifi_manager_unittest onyx_cms onyx_sys onyx_data ${QT_LIBRARIES})
++TARGET_LINK_LIBRARIES(wifi_manager_unittest onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES})
+ SET_TARGET_PROPERTIES(wifi_manager_unittest PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_PATH})
+ 
+ ADD_EXECUTABLE(generate_default_peers generate_default_peers.cpp)
+-TARGET_LINK_LIBRARIES(generate_default_peers onyx_cms onyx_data onyx_sys onyx_data ${QT_LIBRARIES})
++TARGET_LINK_LIBRARIES(generate_default_peers onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES})
+ 
+ 
+ ADD_EXECUTABLE(unzip_test unzip_test.cpp)
+-TARGET_LINK_LIBRARIES(unzip_test onyx_cms onyx_data onyx_sys onyx_data ${QT_LIBRARIES})
+\ No newline at end of file
++TARGET_LINK_LIBRARIES(unzip_test onyx_cms onyx_data onyx_sys onyx_screen ${QT_LIBRARIES})
+\ No newline at end of file
+diff --git a/third_party/gmock/CMakeLists.txt b/third_party/gmock/CMakeLists.txt
+index 0373193..ea3e058 100644
+--- a/third_party/gmock/CMakeLists.txt
++++ b/third_party/gmock/CMakeLists.txt
+@@ -1,7 +1,10 @@
+ include_directories(. include)
+ 
+-add_library(gmock
+-  src/gmock-all.cc)
++add_library(gmock_static STATIC src/gmock-all.cc)
++add_library(gmock SHARED src/gmock-all.cc)
++
++SET_TARGET_PROPERTIES(gmock_static PROPERTIES OUTPUT_NAME "gmock")
++
+ set_target_properties(gmock
+   PROPERTIES
+   COMPILE_FLAGS "-DPATH_MAX=4096")
+diff --git a/third_party/gtest/CMakeLists.txt b/third_party/gtest/CMakeLists.txt
+index 4af8075..eb5b4ee 100644
+--- a/third_party/gtest/CMakeLists.txt
++++ b/third_party/gtest/CMakeLists.txt
+@@ -1,10 +1,17 @@
+ include_directories(.)
+ 
+-add_library(gtest
+-  src/gtest-all.cc)
++add_library(gtest_static STATIC src/gtest-all.cc)
++add_library(gtest SHARED src/gtest-all.cc)
++
++SET_TARGET_PROPERTIES(gtest_static PROPERTIES OUTPUT_NAME "gtest")
++
+ set_target_properties(gtest
+   PROPERTIES
+   COMPILE_FLAGS "-DPATH_MAX=4096")
+ 
+-add_library(gtest_main src/gtest_main.cc)
++add_library(gtest_main_static STATIC src/gtest_main.cc)
++add_library(gtest_main SHARED src/gtest_main.cc)
++
++SET_TARGET_PROPERTIES(gtest_main_static PROPERTIES OUTPUT_NAME "gtest_main")
++
+ target_link_libraries(gtest_main gtest)
