@@ -21,6 +21,7 @@ $(ONYX_LIB_DIR)/.configured: $(ONYX_LIB_DIR)/.unpacked
 	(cd $(ONYX_LIB_DIR);\
 	export QMAKESPEC=$(HOST_DIR)$(EPREFIX)/mkspecs/qws/linux-arm-g++/;\
 	export PATH=$(HOST_DIR)$(EPREFIX)/bin:$(PATH);\
+	export PKG_CONFIG_LIBDIR=$(EPREFIX)/lib/pkgconfig;\
 	cmake \
 	-DBUILD_FOR_ARM:BOOL=ON \
 	-DONYX_SDK_ROOT:PATH=$(EPREFIX) \
