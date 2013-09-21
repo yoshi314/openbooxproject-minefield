@@ -1,16 +1,22 @@
-#ONYX_APP_NAME=onyx-intl-boox-opensource-de7830e
+ONYX_APP_NAME=onyx-intl-boox-opensource
 
+
+ONYX_APP_REPO=https://github.com/onyx-intl/boox-opensource
 ONYX_APP_SOURCE=$(ONYX_APP_NAME).tar.gz
 ONYX_APP_DIR=$(BUILD_DIR)/$(ONYX_APP_NAME)
 
-$(DL_DIR)/$(ONYX_APP_SOURCE):
+$(DL_DIR)/$(ONYX_APP_NAME):
 	mkdir -p $(DL_DIR)
-	$(WGET) -P $(DL_DIR) $(DOWNLOAD_SITE)/$(ONYX_APP_SOURCE)
+#	$(WGET) -P $(DL_DIR) $(DOWNLOAD_SITE)/$(ONYX_APP_SOURCE)
+	[ ! -d "$(DL_DIR)/ONYX_APP_NAME" ] && git clone $(ONYX_APP_REPO) $(DL_DIR)/$(ONYX_APP_NAME)
+	cd $(DL_DIR)/$(ONYX_APP_NAME) && git pull
 
-$(ONYX_APP_DIR)/.unpacked: $(DL_DIR)/$(ONYX_APP_SOURCE)
+
+$(ONYX_APP_DIR)/.unpacked: $(DL_DIR)/$(ONYX_APP_NAME)
 	mkdir -p $(BUILD_DIR)
-	tar -C $(BUILD_DIR) -zxf $(DL_DIR)/$(ONYX_APP_SOURCE)
-	$(PATCH) $(ONYX_APP_DIR) packages/onyx onyx-intl-boox-opensource-\*.patch
+#	tar -C $(BUILD_DIR) -zxf $(DL_DIR)/$(ONYX_APP_SOURCE)
+	rsync -ar $(DL_DIR)/$(ONYX_APP_NAME) $(BUILD_DIR)/
+	$(PATCH) $(ONYX_APP_DIR) packages/onyx onyx-intl-boox-opensource-\*head.patch
 	touch $(ONYX_APP_DIR)/.unpacked
 
 $(ONYX_APP_DIR)/.configured: $(ONYX_APP_DIR)/.unpacked
@@ -20,6 +26,7 @@ $(ONYX_APP_DIR)/.configured: $(ONYX_APP_DIR)/.unpacked
 	cmake \
 	-DBUILD_FOR_ARM:BOOL=ON \
 	-DONYX_SDK_ROOT:PATH=$(EPREFIX) \
+	-DFREETYPE_INCLUDE_DIRS=$(EPREFIX)/include/freetype2 \
 	.\
 	);
 	touch $(ONYX_APP_DIR)/.configured
@@ -34,7 +41,7 @@ $(TARGET_DIR)$(EPREFIX)/bin/onyx_reader: $(ONYX_APP_DIR)/bin/onyx_reader
 
 onyx-app: libiconv curl freetype onyx-lib $(TARGET_DIR)$(EPREFIX)/bin/onyx_reader
 
-onyx-app-source: $(DL_DIR)/$(ONYX_APP_SOURCE)
+onyx-app-source: $(DL_DIR)/$(ONYX_APP_NAME)
 
 onyx-app-clean:
 	-$(MAKE) -C  $(ONYX_APP_DIR) clean
