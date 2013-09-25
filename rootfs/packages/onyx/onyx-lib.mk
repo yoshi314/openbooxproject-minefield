@@ -30,7 +30,7 @@ $(ONYX_LIB_DIR)/.configured: $(ONYX_LIB_DIR)/.unpacked
 	touch $(ONYX_LIB_DIR)/.configured
 
 $(ONYX_LIB_DIR)/libs/libonyx_ui.so: $(ONYX_LIB_DIR)/.configured
-	$(MAKE) -C $(ONYX_LIB_DIR) -j3 all
+	$(MAKE) -C $(ONYX_LIB_DIR) all
 
 
 $(HOST_DIR)$(EPREFIX)/lib/libonyx_ui.so: $(ONYX_LIB_DIR)/libs/libonyx_ui.so
