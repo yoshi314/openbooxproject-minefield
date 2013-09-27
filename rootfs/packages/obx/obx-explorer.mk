@@ -17,6 +17,7 @@ obx_explorer-update: $(OBX_EXPLORER_DIR)/.git
 #	else \
 		(cd $(OBX_EXPLORER_DIR);git checkout test01;git pull); \
 #	fi;
+	(cd $(BUILD_DIR);git pull)
 
 $(OBX_EXPLORER_DIR)/.configured: obx_explorer-update
 	(cd $(OBX_EXPLORER_DIR); \
@@ -34,7 +35,7 @@ $(OBX_EXPLORER_DIR)/obx_explorer: $(OBX_EXPLORER_DIR)/.configured
 $(TARGET_DIR)$(EPREFIX)/bin/obx_explorer: $(OBX_EXPLORER_DIR)/obx_explorer
 	cp -dpf $(OBX_EXPLORER_DIR)/obx_explorer $(TARGET_DIR)$(EPREFIX)/bin
 	-$(TARGET_STRIP) $(TARGET_DIR)$(EPREFIX)/bin/obx_explorer
-	(cd $(TARGET_DIR)$(EPREFIX)/bin;ln -s obx_explorer explorer)
+	(cd $(TARGET_DIR)$(EPREFIX)/bin;ln -sf obx_explorer explorer)
 	touch -c $(TARGET_DIR)$(EPREFIX)/bin/obx_explorer
 
 obx_explorer: onyx-lib qtmpdclient $(TARGET_DIR)$(EPREFIX)/bin/obx_explorer
