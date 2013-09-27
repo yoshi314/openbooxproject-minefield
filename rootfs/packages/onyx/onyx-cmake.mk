@@ -11,13 +11,11 @@ ONYX_CMAKE_REPO=https://github.com/onyx-intl/cmake_modules.git
 $(DL_DIR)/$(ONYX_CMAKE_SOURCE):
 	[ ! -d "$(DL_DIR)/$(ONYX_CMAKE_NAME)" ] && git clone $(ONYX_CMAKE_REPO) $(DL_DIR)/$(ONYX_CMAKE_NAME)
 	cd $(DL_DIR)/$(ONYX_CMAKE_NAME) && git pull
-	touch $(DL_DIR)/$(ONYX_CMAKE_SOURCE)
-#	$(WGET) -P $(DL_DIR) $(DOWNLOAD_SITE)/$(ONYX_CMAKE_SOURCE)
+	touch $(DL_DIR)/$(ONYX_CMAKE_SOURCE).fetch
 
 $(ONYX_CMAKE_HOST_DIR)/.unpacked: $(DL_DIR)/$(ONYX_CMAKE_SOURCE)
 	cd $(DL_DIR)/$(ONYX_CMAKE_NAME) && git pull
 	rsync -avr $(DL_DIR)/$(ONYX_CMAKE_NAME) $(HOST_DIR)$(EPREFIX)/
-#	tar -C $(HOST_DIR)$(EPREFIX) -xzf $(DL_DIR)/$(ONYX_CMAKE_SOURCE)
 	(cd $(HOST_DIR)$(EPREFIX); ln -sf $(ONYX_CMAKE_NAME) cmake_modules)
 	$(PATCH) $(ONYX_CMAKE_HOST_DIR) packages/onyx onyx-cmake\*.patch
 	touch $(ONYX_CMAKE_HOST_DIR)/.unpacked
