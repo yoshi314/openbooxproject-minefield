@@ -3,7 +3,7 @@
 # gdb
 #
 ######################################################################
-GDB_SOURCE:=gdb-7.0.1.tar.bz2
+GDB_SOURCE:=gdb-7.0.1a.tar.bz2
 GDB_DIR:=$(BUILD_DIR)/gdb-7.0.1
 GDB_DOWNLOAD_SITE:="ftp://ftp.gnu.org/gnu/gdb"
 
