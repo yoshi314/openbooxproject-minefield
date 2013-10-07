@@ -15,9 +15,9 @@ obx_explorer-update: $(OBX_EXPLORER_DIR)/.git
 #	@if [ "`(cd $(OBX_EXPLORER_DIR);git tag -l '$(OBX_VERSION)')`" == "$(OBX_VERSION)" ] ; then \
 #		(cd $(OBX_EXPLORER_DIR);git checkout tags/$(OBX_VERSION)); \
 #	else \
-		(cd $(OBX_EXPLORER_DIR);git checkout test01;git pull); \
+		cd $(OBX_EXPLORER_DIR);git checkout test01;git pull; 
 #	fi;
-	(cd $(BUILD_DIR);git pull)
+#	cd $(BUILD_DIR);git pull
 
 $(OBX_EXPLORER_DIR)/.configured: obx_explorer-update
 	(cd $(OBX_EXPLORER_DIR); \

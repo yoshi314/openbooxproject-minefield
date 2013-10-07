@@ -1,0 +1,6 @@
+#!/bin/sh
+cd `dirname $0`
+killall getty
+rmmod g_serial
+modprobe -r arcotg_udc
+modprobe pcconn_mon
