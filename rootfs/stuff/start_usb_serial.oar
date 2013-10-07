@@ -2,7 +2,7 @@
 cd `dirname $0`
 modprobe -r pcconn_mon
 lsmod | grep arcotg_udc || modprobe arcotg_udc
-lsmod | grep g_serial || insmod ./g_serial.ko
+lsmod | grep g_serial || modprobe g_serial.ko
 if [ -e /dev/ttyGS0 ]; then
 	/sbin/getty -L ttyGS0 115200 vt100 &
 fi
