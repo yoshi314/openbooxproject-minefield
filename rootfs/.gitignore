@@ -4,6 +4,6 @@ host/
 images/
 kernel/
 dl
-.config*
+rootfs/.config*
 *~
 extras/fonts/*

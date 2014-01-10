@@ -1,0 +1,13 @@
+#!/bin/sh
+cd `dirname $0`
+modprobe -r pcconn_mon
+lsmod | grep arcotg_udc || modprobe arcotg_udc
+lsmod | grep g_ether || modprobe g_ether
+
+sleep 3
+
+ifconfig usb0 10.0.0.2 up
+
+#on the pc side, assign different ip of similar subnet, e.g.
+#ifconfig <interface> 10.0.0.3 up
+#telnet should be available over the interface
