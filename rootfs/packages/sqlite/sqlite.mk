@@ -1,9 +1,9 @@
-SQLITE_SOURCE=sqlite-amalgamation-3080002.zip
-SQLITE_DIR=$(BUILD_DIR)/sqlite-amalgamation-3080002
+SQLITE_SOURCE=sqlite-amalgamation-3081101.zip
+SQLITE_DIR=$(BUILD_DIR)/sqlite-amalgamation-3081101
 
 $(DL_DIR)/$(SQLITE_SOURCE):
 #	$(WGET) -P $(DL_DIR) $(DOWNLOAD_SITE)/$(SQLITE_SOURCE)
-	$(WGET) -P $(DL_DIR) http://www.sqlite.org/2013/sqlite-amalgamation-3080002.zip
+	$(WGET) -P $(DL_DIR) http://www.sqlite.org/2015/sqlite-amalgamation-3081101.zip
 
 $(SQLITE_DIR)/.unpacked:$(DL_DIR)/$(SQLITE_SOURCE)
 	mkdir -p $(SQLITE_DIR)
